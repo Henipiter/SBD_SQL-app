@@ -18,6 +18,7 @@ namespace SQL_project
         }
         private string buttonText;
         private int function;
+        private int type;
         
         public Form1 mainForm = null;
         public Form2(Form callingForm)
@@ -39,7 +40,6 @@ namespace SQL_project
                     this.WorkerButton.Enabled = false;
                     this.SellTransactionButton.Enabled = false;
                     this.RentTransactionButton.Enabled = false;
-                    this.PartButton.Enabled = false;
 
                     this.AddButton.Enabled = true;
                     this.DeleteButton.Enabled = true;
@@ -56,7 +56,6 @@ namespace SQL_project
                     this.WorkerButton.Enabled = true;
                     this.SellTransactionButton.Enabled = true;
                     this.RentTransactionButton.Enabled = true;
-                    this.PartButton.Enabled = true;
                     if (switch2 != 1)
                         this.AddButton.Enabled = false;
                     if (switch2 != 2)
@@ -115,8 +114,10 @@ namespace SQL_project
         {
             //this.Hide();
             this.ButtonsDefaultSettings(0, 5);
+            this.type = 0;
             this.buttonText += " car";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "Numer VIN", "Marka", "Model", "Rocznik", "Nazwa wypozyczalni"  );
+            string[] labels = { "VNumer VIN", "VMarka", "VModel", "NRocznik", "VNazwa wypozyczalni",""};
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
            // Form3 frm = new Form3(this,this.buttonText);
 
 
@@ -126,16 +127,20 @@ namespace SQL_project
         {
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
+            this.type = 1;
             this.buttonText += " car rental";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "Nazwa", "Adres");
+            string[] labels = { "VNazwa", "VAdres", "", "", "", "" };
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
         private void CarRepairShopButton_Click(object sender, EventArgs e)
         {
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
+            this.type = 2;
             this.buttonText += " car repair shop";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "Nazwa", "Adres");
+            string[] labels = { "VNazwa", "VAdres", "", "", "", "" };
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
 
@@ -144,7 +149,9 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.buttonText += " repair";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "Numer naprawy", "Data naprawy", "Cena robocizny", "Nazwa warsztatu", "Numer VIN");
+            this.type = 3;
+            string[] labels = {"*Numer naprawy", "DData naprawy", "NCena robocizny", "VNazwa warsztatu", "VNumer VIN", "" };
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
 
@@ -152,8 +159,10 @@ namespace SQL_project
         {
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
+            this.type = 4;
+            string[] labels = {"*ID", "VImie", "VNazwisko", "NPESEL", "", "", "" };
             this.buttonText += " customer";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "ID", "Imie", "Nazwisko", "PESEL");
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
 
@@ -162,7 +171,9 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.buttonText += " worker";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "ID", "Imie", "Nazwisko", "Pesel", "Placa", "Nazwa wypozyczalni");
+            this.type = 5;
+            string[] labels = {"*ID", "VImie", "VNazwisko", "NPesel", "NPlaca", "VNazwa wypozyczalni" };
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
 
@@ -171,7 +182,9 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.buttonText += " sell transaction";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "Numer zlecenia", "Data sprzedazy", "Cena", "Rabat", "VIN", "ID_klienta");
+            this.type = 6;
+            string[] labels = {"*Numer zlecenia", "DData sprzedazy", "NCena", "NRabat", "VVIN", "NID_klienta" };
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
 
@@ -180,7 +193,9 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.buttonText += " rent transaction";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "Numer zlecenia", "Cena","Data wynajmu", "Data oddania",  "VIN", "ID_klienta");
+            this.type = 7;
+            string[] labels = { "*Numer zlecenia", "NCena", "DData wynajmu", "DData oddania", "VVIN", "NID_klienta" };
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
 
             formularz.Show();
         }
@@ -190,13 +205,6 @@ namespace SQL_project
             this.ButtonsDefaultSettings(0, 5);
         }
 
-        private void PartButton_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            this.ButtonsDefaultSettings(0, 5);
-            this.buttonText += " part repair";
-            Form4 formularz = new Form4(this, this.function, this.buttonText, "Numer naprawy");
-            formularz.Show();
-        }
+        
     }
 }

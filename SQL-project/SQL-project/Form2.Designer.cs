@@ -43,7 +43,6 @@
             this.SellTransactionButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
-            this.PartButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AddButton
@@ -178,7 +177,7 @@
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(149, 361);
+            this.cancelButton.Location = new System.Drawing.Point(152, 325);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(181, 31);
             this.cancelButton.TabIndex = 13;
@@ -196,22 +195,11 @@
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
-            // PartButton
-            // 
-            this.PartButton.Location = new System.Drawing.Point(263, 322);
-            this.PartButton.Name = "PartButton";
-            this.PartButton.Size = new System.Drawing.Size(181, 31);
-            this.PartButton.TabIndex = 15;
-            this.PartButton.Text = "Part repair";
-            this.PartButton.UseVisualStyleBackColor = true;
-            this.PartButton.Click += new System.EventHandler(this.PartButton_Click);
-            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 413);
-            this.Controls.Add(this.PartButton);
+            this.ClientSize = new System.Drawing.Size(476, 368);
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.SellTransactionButton);
@@ -250,6 +238,5 @@
         private System.Windows.Forms.Button SellTransactionButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button ExitButton;
-        private System.Windows.Forms.Button PartButton;
     }
 }
