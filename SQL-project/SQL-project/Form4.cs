@@ -58,10 +58,49 @@ namespace SQL_project
                 this.label6.Visible = false;
                 this.textBox6.Visible = false;
             }
-            
+            if (this.button1.Text == "Add repair"||this.button1.Text == "Add rent transaction" || this.button1.Text == "Add customer" || this.button1.Text == "Add sell transaction" || this.button1.Text == "Add worker") 
+            {
+                this.label1.Visible = false;
+                this.textBox1.Visible = false;
+            }
+            if (this.button1.Text == "Add part repair") 
+            {
+                this.label7.Visible = true;
+                this.textBox8.Visible = true;
+                this.label8.Visible = true;
+                this.textBox7.Visible = true;
+            }
+            if (this.button1.Text == "Delete worker") 
+            {
+                HideLabelsAndBoxes26();
+            }
+
 
         }
-
+        private void HideLabelsAndBoxes26() 
+        {
+            this.label2.Visible = false;
+            this.textBox2.Visible = false;
+            this.label3.Visible = false;
+            this.textBox3.Visible = false;
+            this.label4.Visible = false;
+            this.textBox4.Visible = false;
+            this.label5.Visible = false;
+            this.textBox5.Visible = false;
+            this.label6.Visible = false;
+            this.textBox6.Visible = false;
+        }
+        private void CleanTextBoxes() 
+        {
+            this.textBox1.Text = "";
+            this.textBox2.Text = "";
+            this.textBox3.Text = "";
+            this.textBox4.Text = "";
+            this.textBox5.Text = "";
+            this.textBox6.Text = "";
+            this.textBox7.Text = "";
+            this.textBox8.Text = "";
+        }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
@@ -111,6 +150,7 @@ namespace SQL_project
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception)
                                 {
@@ -137,6 +177,7 @@ namespace SQL_project
                             try
                             {
                                 cmd.ExecuteNonQuery();
+                                CleanTextBoxes();
                             }
                             catch (Exception)
                             {
@@ -154,6 +195,7 @@ namespace SQL_project
                             try
                             {
                                 cmd.ExecuteNonQuery();
+                                CleanTextBoxes();
                             }
                             catch (Exception)
                             {
@@ -165,21 +207,68 @@ namespace SQL_project
                         else if (this.button1.Text == "Add repair")
                         {
                             //TO DO
+                            try
+                            {
+                                int cenar = Int32.Parse(this.textBox3.Text);
+                                int rok, miesiac, dzien;
+                                rok = Int32.Parse(this.textBox2.Text.Substring(0, 4));
+                                miesiac = Int32.Parse(this.textBox2.Text.Substring(5, 2));
+                                dzien = Int32.Parse(this.textBox2.Text.Substring(8, 2));
+                                DateTime dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
+                                OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "nowaNaprawa1";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vDataNaprawy", OracleDbType.Date).Value = dt;
+                                cmd.Parameters.Add("vCenaRobocizny", OracleDbType.Decimal).Value = cenar;
+                                cmd.Parameters.Add("vNazwaWarsztatu", OracleDbType.Varchar2).Value = this.textBox4.Text;
+                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    this.label7.Visible = true;
+                                    this.label8.Visible = true;
+                                    this.textBox7.Visible = true;
+                                    this.textBox8.Visible = true;
+                                    this.button1.Text = "Add parts";
+                                    this.label1.Visible = false;
+                                    this.textBox1.Visible = false;
+                                    this.label2.Visible = false;
+                                    this.textBox2.Visible = false;
+                                    this.label3.Visible = false;
+                                    this.textBox3.Visible = false;
+                                    this.label4.Visible = false;
+                                    this.textBox4.Visible = false;
+                                    this.label5.Visible = false;
+                                    this.textBox5.Visible = false;
+                                    CleanTextBoxes();
+                                }
+                                catch (Exception)
+                                {
+
+                                    throw;
+                                }
+                            }
+                            catch (Exception)
+                            {
+
+                                throw;
+                            }
                         }
                         else if (this.button1.Text == "Add customer")
                         {
                             try
                             {
-                                int pesel = Int32.Parse(this.textBox3.Text);
+                                int pesel = Int32.Parse(this.textBox4.Text);
                                 OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "nowyKlient";
                                 cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox1.Text;
-                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox3.Text;
                                 cmd.Parameters.Add("vPesel", OracleDbType.Decimal).Value = pesel;
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception)
                                 {
@@ -198,19 +287,20 @@ namespace SQL_project
                         {
                             try
                             {
-                                int pesel = Int32.Parse(this.textBox3.Text);
-                                int placa = Int32.Parse(this.textBox4.Text);
+                                int pesel = Int32.Parse(this.textBox4.Text);
+                                int placa = Int32.Parse(this.textBox5.Text);
                                 OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "nowyPracownik";
                                 cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox1.Text;
-                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox3.Text;
                                 cmd.Parameters.Add("vPesel", OracleDbType.Decimal).Value = pesel;
                                 cmd.Parameters.Add("vPlaca", OracleDbType.Decimal).Value = placa;
-                                cmd.Parameters.Add("vNazwaWypozyczalni", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                cmd.Parameters.Add("vNazwaWypozyczalni", OracleDbType.Varchar2).Value = this.textBox6.Text;
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception)
                                 {
@@ -225,11 +315,14 @@ namespace SQL_project
                         }
                         else if (this.button1.Text == "Add sell transaction")
                         {
-                            int cena = Int32.Parse(this.textBox2.Text);
-                            int rabat = Int32.Parse(this.textBox3.Text);
+                            int cena = Int32.Parse(this.textBox3.Text);
+                            int rabat = Int32.Parse(this.textBox4.Text);
                             OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
-
-                            DateTime dt = new DateTime(2012, 5, 7, 12, 23, 22, 0);
+                            int rok, miesiac, dzien;
+                            rok = Int32.Parse(this.textBox2.Text.Substring(0, 4));
+                            miesiac = Int32.Parse(this.textBox2.Text.Substring(5, 2));
+                            dzien = Int32.Parse(this.textBox2.Text.Substring(8, 2));
+                            DateTime dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
 
 
                             
@@ -239,11 +332,12 @@ namespace SQL_project
 
                             cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
                             cmd.Parameters.Add("vRabat", OracleDbType.Decimal).Value = rabat;
-                            cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox4.Text;
-                            cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                            cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                            cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox6.Text;
                             try
                             {
                                 cmd.ExecuteNonQuery();
+                                CleanTextBoxes();
                             }
                             catch (Exception)
                             {
@@ -254,18 +348,31 @@ namespace SQL_project
 
                         else if (this.button1.Text == "Add rent transaction")
                         {
-                            int cena = Int32.Parse(this.textBox1.Text);
+                            int cena = Int32.Parse(this.textBox2.Text);
+                            int rok, miesiac, dzien;
+                            rok = Int32.Parse(this.textBox3.Text.Substring(0, 4));
+                            miesiac = Int32.Parse(this.textBox3.Text.Substring(5, 2));
+                            dzien = Int32.Parse(this.textBox3.Text.Substring(8, 2));
+                            DateTime dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
+
+                            int rok2, miesiac2, dzien2;
+                            rok2 = Int32.Parse(this.textBox4.Text.Substring(0, 4));
+                            miesiac2 = Int32.Parse(this.textBox4.Text.Substring(5, 2));
+                            dzien2 = Int32.Parse(this.textBox4.Text.Substring(8, 2));
+                            DateTime dt2 = new DateTime(rok2, miesiac2, dzien2, 12, 23, 22, 0);
+
                             OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
                             cmd.CommandText = "noweZlecenieWynajmu";
                             cmd.CommandType = CommandType.StoredProcedure;
                             cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
-                            cmd.Parameters.Add("vDataWynajmu", OracleDbType.Date).Value = this.textBox2.Text;
-                            cmd.Parameters.Add("vDataOddania", OracleDbType.Date).Value = this.textBox3.Text;
-                            cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox4.Text;
-                            cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                            cmd.Parameters.Add("vDataWynajmu", OracleDbType.Date).Value = dt;
+                            cmd.Parameters.Add("vDataOddania", OracleDbType.Date).Value = dt2;
+                            cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                            cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox6.Text;
                             try
                             {
                                 cmd.ExecuteNonQuery();
+                                CleanTextBoxes();
                             }
                             catch (Exception)
                             {
@@ -273,6 +380,60 @@ namespace SQL_project
                                 throw;
                             }
 
+                        }
+                        else if (this.button1.Text == "Add parts")
+                        {
+                            try
+                            {
+                                int cenaE = Int32.Parse(this.textBox8.Text);
+                                OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "noweCzesci";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vNazwaElementu", OracleDbType.Varchar2).Value = this.textBox7.Text;
+                                cmd.Parameters.Add("vCenaElementu", OracleDbType.Varchar2).Value = cenaE;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
+                                }
+                                catch (Exception)
+                                {
+
+                                    throw;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                throw;
+                            }
+                        }
+                        else if (this.button1.Text == "Add part repair")
+                        {
+                            try
+                            {
+                                int nrNaprawy = Int32.Parse(this.textBox1.Text);
+                                int cenaE = Int32.Parse(this.textBox8.Text);
+                                OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "nowaCzesc";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vNrNaprawy", OracleDbType.Decimal).Value = nrNaprawy;
+                                cmd.Parameters.Add("vNazwaElementu", OracleDbType.Varchar2).Value = this.textBox7.Text;
+                                cmd.Parameters.Add("vCenaElementu", OracleDbType.Varchar2).Value = cenaE;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
+                                }
+                                catch (Exception)
+                                {
+
+                                    throw;
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                throw;
+                            }
                         }
 
 
@@ -282,13 +443,68 @@ namespace SQL_project
 
 
                         break;
-                    case 2:
+                    case 1:
+                        if (this.button1.Text == "Delete worker")
+                        {
+                            int ID = 0;
+                            try
+                            {
+                                ID = Int32.Parse(this.textBox1.Text);
+                                OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "usunpracownika";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vID", OracleDbType.Decimal).Value = ID;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
+                                }
+                                catch (Exception)
+                                {
 
+                                    throw;
+                                }
+
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Podaj liczbe w polu 'Rocznik'");
+                            }
+
+
+
+                        }
                         break;
                     default:
                         break;
                 }
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (this.button1.Text == "Add parts") 
+            {
+                this.button1.Text = "Add repair";
+                this.label7.Visible = false;
+                this.label8.Visible = false;
+                this.textBox7.Visible = false;
+                this.textBox8.Visible = false;
+                this.label2.Visible = true;
+                this.textBox2.Visible = true;
+                this.label3.Visible = true;
+                this.textBox3.Visible = true;
+                this.label4.Visible = true;
+                this.textBox4.Visible = true;
+                this.label5.Visible = true;
+                this.textBox5.Visible = true;
+            }
+            else 
+            {
+                this.Close();
+                this.mainForm.Show();
+            }
+                
         }
     }
 }
