@@ -18,9 +18,10 @@ namespace SQL_project
         private string[] operators = { "Add", "Delete", "Search", "Modify", "Show" };
         private string[] entity = { "samochody", "wypozyczalnie", "warsztaty", "naprawy", "klienci", "pracownicy_wypozyczalni", "zlecenia_sprzedazy", "zlecenia_wynajmu"};
         private string[] name = { "car", "car rental", "car repair shop", "repair", "customer", "worker", "sell transaction", "rent transaction","part repair","part repair" };
-        private int[] labels = new int[8];
-        private int[] textBoxes = new int[8];
-        private char[] format = new char[8];
+        private string[] deleteProcedure = { "samochod", "wypozyczalnie", "warsztat", "naprawy", "klienta", "pracownika", "zleceniesprzedzazy", "zleceniewynajmu" };
+        private int[] labels = new int[6];
+        private int[] textBoxes = new int[6];
+        private char[] format = new char[6];
         private Form2 mainForm = null;
         public Form4(Form mainF, int func, int type, string[] labels)
         {
@@ -41,7 +42,7 @@ namespace SQL_project
                     if (g < 6)
                     {
                         this.labels[g] = k;
-                        if (labels[g].Length == 0 || function == 4)
+                        if (labels[g].Length == 0 || function == 4 || (function == 1 && g != 0))
                             ((Label)form).Visible = false;
                         else
                         {
@@ -56,7 +57,7 @@ namespace SQL_project
                     if (g < 6)
                     {
                         this.textBoxes[g] = k;
-                        if (labels[g].Length == 0 || function == 4)
+                        if (labels[g].Length == 0 || function == 4 || (function == 1 && g != 0)) 
                             ((TextBox)form).Visible = false;
                     }
                 }
@@ -76,19 +77,6 @@ namespace SQL_project
                 this.label3.Visible = false;
                 this.textBox2.Visible = false;
                 this.textBox3.Visible = false;
-            }
-            if (this.button1.Text == "Delete worker")
-            {
-                this.label2.Visible = false;
-                this.textBox2.Visible = false;
-                this.label3.Visible = false;
-                this.textBox3.Visible = false;
-                this.label4.Visible = false;
-                this.textBox4.Visible = false;
-                this.label5.Visible = false;
-                this.textBox5.Visible = false;
-                this.label6.Visible = false;
-                this.textBox6.Visible = false;
             }
         }
         private void CleanTextBoxes()
@@ -480,23 +468,35 @@ namespace SQL_project
                     (textBox6.Text.Length > 0 == true))
 
                     {
-                        OracleCommand cmd2 = mainForm.mainForm.con.CreateCommand();
-                        cmd2.CommandText = "delete from " + entity[this.type] + " where ";
-                        int c = cmd2.CommandText.Length;
-                        for (int i = 0; i < 6; i++)
+                        int result = 0;
+                        if (format[0] == 'N')
                         {
-                            if (this.Controls[textBoxes[i]].Text.Length > 0)
+                            try { result = Int32.Parse(this.textBox1.Text); }
+                            catch (FormatException)
                             {
-                                cmd2.CommandText += this.Controls[labels[i]].Text + "=";
-                                if (format[i] == 'N')
-                                    cmd2.CommandText += this.Controls[textBoxes[i]].Text + "and ";
-                                else
-                                    cmd2.CommandText += "'" + this.Controls[textBoxes[i]].Text + "' and ";
+                                MessageBox.Show("Podaj liczbe w identyfikatorze");
+                                Console.WriteLine("Podaj liczbe w identyfikatorze");
+                                break;
                             }
                         }
-                        cmd2.CommandText = cmd2.CommandText.Substring(0, cmd2.CommandText.Length - 4);
-                        cmd2.ExecuteReader();
-                        
+                        OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
+                        cmd.CommandText = "usun"+this.deleteProcedure[type];
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        if (format[0] == 'N') 
+                            cmd.Parameters.Add("vKlucz", OracleDbType.Decimal).Value = this.textBox1.Text;
+                        else
+                            cmd.Parameters.Add("vKlucz", OracleDbType.Varchar2).Value = this.textBox1.Text;
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                            CleanTextBoxes();
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+                        break;
 
                     }
                     else
@@ -555,7 +555,9 @@ namespace SQL_project
                         MessageBox.Show("Przynajmniej jedno pole musi byc wypelnione");
                     }
                     break;
+                case 3:
 
+                    break;
                 case 4:
                     OracleCommand cmd3 = mainForm.mainForm.con.CreateCommand();
                     cmd3.CommandText = "select * from " + entity[this.type];

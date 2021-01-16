@@ -110,7 +110,7 @@ namespace SQL_project
 
         private void CarButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+           // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 0;
             string[] labels = { "VNumer_VIN", "VMarka", "VModel", "NRocznik", "VNazwa_wypozyczalni_posiadajacej", ""};
@@ -119,7 +119,7 @@ namespace SQL_project
         }
         private void CarRentalButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+           // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 1;
             string[] labels = { "VNazwa", "VAdres", "", "", "", "" };
@@ -128,7 +128,7 @@ namespace SQL_project
         }
         private void CarRepairShopButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+          //  this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 2;
             string[] labels = { "VNazwa_warsztatu", "VAdres_warsztanu", "", "", "", "" };
@@ -138,7 +138,7 @@ namespace SQL_project
 
         private void RepairButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+           // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 3;
             string[] labels = { "NNr_naprawy", "DData_naprawy", "NCena_robocizny", "VNazwa_warsztatu_naprawiajacego", "VNr_VIN_naprawianego_samochodu", "" };
@@ -148,7 +148,7 @@ namespace SQL_project
 
         private void CustomerButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+           // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 4;
             string[] labels = {"NID_klienta", "VImie_klienta", "VNazwisko_klienta", "NPESEL_klienta", "", "", "" };
@@ -158,7 +158,7 @@ namespace SQL_project
 
         private void WorkerButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+           // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 5;
             string[] labels = {"NID_pracownika", "VImie_pracownika", "VNazwisko_pracownika", "NPesel_pracownika", "NPlaca", "VNazwa_wypozyczalni" };
@@ -168,7 +168,7 @@ namespace SQL_project
 
         private void SellTransactionButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+           // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 6;
             string[] labels = { "NNr_zlecenia_sprzedazy", "DData_sprzedazy", "NCena", "NPrzyznany_Rabat", "VNr_VIN_sprzedawanego_samochodu", "NID_klienta_kupujacego" };
@@ -178,7 +178,7 @@ namespace SQL_project
 
         private void RentTransactionButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+           // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 7;
             string[] labels = { "NNr_zlecenia_wynajmu", "NCena", "DData_wynajmu", "DData_oddania", "VNr_VIN_wynajmowanego_samochodu", "NID_klienta_wynajmujacego" };
@@ -193,7 +193,7 @@ namespace SQL_project
 
         private void PartButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+           // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 9;
             string[] labels = { "NNumer_naprawy", "VNazwa_elementu", "NCena", "", "", "" };
