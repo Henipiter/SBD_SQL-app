@@ -56,3 +56,18 @@ C:\Users\Henryk\Semestr 5\SBD\Projekt\SQL-project\SQL-project\obj\Debug\SQL-proj
 C:\Users\Henryk\Semestr 5\SBD\Projekt\SQL-project\SQL-project\obj\Debug\SQL-project.csproj.CopyComplete
 C:\Users\Henryk\Semestr 5\SBD\Projekt\SQL-project\SQL-project\obj\Debug\SQL-project.exe
 C:\Users\Henryk\Semestr 5\SBD\Projekt\SQL-project\SQL-project\obj\Debug\SQL-project.pdb
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\bin\Debug\SQL-project.exe.config
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\bin\Debug\SQL-project.exe
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\bin\Debug\SQL-project.pdb
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\bin\Debug\Oracle.ManagedDataAccess.dll
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.csprojAssemblyReference.cache
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL_project.Form1.resources
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL_project.Form2.resources
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL_project.Form3.resources
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL_project.Form4.resources
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL_project.Properties.Resources.resources
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.csproj.GenerateResource.cache
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.csproj.CoreCompileInputs.cache
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.csproj.CopyComplete
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.exe
+C:\Users\Henryk\Desktop\Nowy folder (2)\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.pdb

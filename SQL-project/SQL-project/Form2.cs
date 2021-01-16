@@ -16,7 +16,6 @@ namespace SQL_project
         {
             InitializeComponent();
         }
-        private string buttonText;
         private int function;
         private int type;
         
@@ -40,6 +39,7 @@ namespace SQL_project
                     this.WorkerButton.Enabled = false;
                     this.SellTransactionButton.Enabled = false;
                     this.RentTransactionButton.Enabled = false;
+                    this.cancelButton.Enabled = false;
 
                     this.AddButton.Enabled = true;
                     this.DeleteButton.Enabled = true;
@@ -56,6 +56,7 @@ namespace SQL_project
                     this.WorkerButton.Enabled = true;
                     this.SellTransactionButton.Enabled = true;
                     this.RentTransactionButton.Enabled = true;
+                    this.cancelButton.Enabled = true;
                     if (switch2 != 1)
                         this.AddButton.Enabled = false;
                     if (switch2 != 2)
@@ -75,31 +76,26 @@ namespace SQL_project
         
         private void AddButton_Click(object sender, EventArgs e)
         {
-            this.buttonText = "Add";
             this.function = 0;
             this.ButtonsDefaultSettings(1, 1);
         }
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            this.buttonText = "Delete";
             this.function = 1;
             this.ButtonsDefaultSettings(1, 2);
         }
         private void SearchButton_Click(object sender, EventArgs e)
         {
-            this.buttonText = "Search";
             this.function = 2;
             this.ButtonsDefaultSettings(1, 3);
         }
         private void ModifyButton_Click(object sender, EventArgs e)
         {
-            this.buttonText = "Modify";
             this.function = 3;
             this.ButtonsDefaultSettings(1, 4);
         }
         private void ShowButton_Click(object sender, EventArgs e)
         {
-            this.buttonText = "Show";
             this.function = 4;
             this.ButtonsDefaultSettings(1, 5);
         }
@@ -112,15 +108,11 @@ namespace SQL_project
 
         private void CarButton_Click(object sender, EventArgs e)
         {
-            //this.Hide();
+            this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 0;
-            this.buttonText += " car";
-            string[] labels = { "VNumer VIN", "VMarka", "VModel", "NRocznik", "VNazwa wypozyczalni",""};
+            string[] labels = { "VNumer_VIN", "VMarka", "VModel", "NRocznik", "VNazwa_wypozyczalni", ""};
             Form4 formularz = new Form4(this, this.function, this.type, labels);
-           // Form3 frm = new Form3(this,this.buttonText);
-
-
             formularz.Show();
         }
         private void CarRentalButton_Click(object sender, EventArgs e)
@@ -128,7 +120,6 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 1;
-            this.buttonText += " car rental";
             string[] labels = { "VNazwa", "VAdres", "", "", "", "" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
@@ -138,7 +129,6 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 2;
-            this.buttonText += " car repair shop";
             string[] labels = { "VNazwa", "VAdres", "", "", "", "" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
@@ -148,9 +138,8 @@ namespace SQL_project
         {
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
-            this.buttonText += " repair";
             this.type = 3;
-            string[] labels = {"*Numer naprawy", "DData naprawy", "NCena robocizny", "VNazwa warsztatu", "VNumer VIN", "" };
+            string[] labels = { "*Numer_naprawy", "DData_naprawy", "NCena_robocizny", "VNazwa_warsztatu", "VNumer_VIN", "" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -161,7 +150,6 @@ namespace SQL_project
             this.ButtonsDefaultSettings(0, 5);
             this.type = 4;
             string[] labels = {"*ID", "VImie", "VNazwisko", "NPESEL", "", "", "" };
-            this.buttonText += " customer";
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -170,9 +158,8 @@ namespace SQL_project
         {
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
-            this.buttonText += " worker";
             this.type = 5;
-            string[] labels = {"*ID", "VImie", "VNazwisko", "NPesel", "NPlaca", "VNazwa wypozyczalni" };
+            string[] labels = {"*ID", "VImie", "VNazwisko", "NPesel", "NPlaca", "VNazwa_wypozyczalni" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -181,9 +168,8 @@ namespace SQL_project
         {
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
-            this.buttonText += " sell transaction";
             this.type = 6;
-            string[] labels = {"*Numer zlecenia", "DData sprzedazy", "NCena", "NRabat", "VVIN", "NID_klienta" };
+            string[] labels = { "*Numer_zlecenia", "DData_sprzedazy", "NCena", "NRabat", "VVIN", "NID_klienta" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -192,11 +178,9 @@ namespace SQL_project
         {
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
-            this.buttonText += " rent transaction";
             this.type = 7;
-            string[] labels = { "*Numer zlecenia", "NCena", "DData wynajmu", "DData oddania", "VVIN", "NID_klienta" };
+            string[] labels = { "*Numer_zlecenia", "NCena", "DData_wynajmu", "DData_oddania", "VVIN", "NID_klienta" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
-
             formularz.Show();
         }
 

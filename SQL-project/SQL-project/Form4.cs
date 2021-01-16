@@ -28,32 +28,30 @@ namespace SQL_project
             InitializeComponent();
             this.function = func;
             this.type = type;
-            this.button1.Text = operators[func]+name[type];
+            this.button1.Text = operators[func]+" "+name[type];
            
-            int i = labels.Length;
-            int j = i;
-            Control aaa;
+            Control form;
             for (int k=0; k < this.Controls.Count; k++) 
             {
-                aaa = this.Controls[k];
-                if (aaa.Name == ("label" + i.ToString()))
+                form = this.Controls[k];
+                if (form.Name.Length>5 && form.Name.Substring(0,5) == "label")
                 {
-                    this.labels[i - 1] = k;
-                    if (labels[i - 1].Length == 0)
-                        ((Label)aaa).Visible = false;
+                    int g = (int)Char.GetNumericValue(form.Name[5]) -1;
+                    this.labels[g] = k;
+                    if (labels[g].Length == 0 || function == 4)
+                        ((Label)form).Visible = false;
                     else
                     {
-                        this.format[i - 1] = labels[i - 1][0];
-                        ((Label)aaa).Text = labels[i - 1].Substring(1) ;
+                        this.format[g] = labels[g][0];
+                        ((Label)form).Text = labels[g].Substring(1);
                     }
-                    i--;
                 }
-                if (aaa.Name == ("textBox" + j.ToString()))
+                else if (form.Name.Length > 7 && form.Name.Substring(0, 7) == "textBox")
                 {
-                    this.textBoxes[j - 1] = k;
-                    if( labels[j-1].Length == 0)
-                        ((TextBox)aaa).Visible = false;
-                    j--;
+                    int g = (int)Char.GetNumericValue(form.Name[7]) - 1;
+                    this.textBoxes[g] = k;
+                    if (labels[g].Length == 0 || function == 4)
+                        ((TextBox)form).Visible = false;
                 }
             }
         }
@@ -271,17 +269,45 @@ namespace SQL_project
                             }
 
                         }
-
-
-
-
-
-
-
-                            
                     }
                     break;
-                    
+                case 1:
+                    if ((textBox1.Text.Length > 0 == true) ||
+                    (textBox2.Text.Length > 0 == true) ||
+                    (textBox3.Text.Length > 0 == true) ||
+                    (textBox4.Text.Length > 0 == true) ||
+                    (textBox5.Text.Length > 0 == true) ||
+                    (textBox6.Text.Length > 0 == true))
+
+                    {
+                        OracleCommand cmd2 = mainForm.mainForm.con.CreateCommand();
+                        cmd2.CommandText = "delete from " + entity[this.type] + " where ";
+                        int c = cmd2.CommandText.Length;
+                        for (int i = 0; i < 6; i++)
+                        {
+                            if (this.Controls[textBoxes[i]].Text.Length > 0)
+                            {
+                                cmd2.CommandText += this.Controls[labels[i]].Text + "=";
+                                if (format[i] == 'N')
+                                    cmd2.CommandText += this.Controls[textBoxes[i]].Text + "and ";
+                                else
+                                    cmd2.CommandText += "'" + this.Controls[textBoxes[i]].Text + "' and ";
+                            }
+                        }
+                        cmd2.CommandText = cmd2.CommandText.Substring(0, cmd2.CommandText.Length - 4);
+                        OracleDataReader reader = cmd2.ExecuteReader();
+                        if (reader.HasRows)
+                            while (reader.Read())
+                                this.richTextBox1.Text += "\t " + reader.GetString(0) + "\t " + reader.GetString(1) + "\t "
+                                    + reader.GetString(2) + "\t " + reader.GetString(3) + "\t " + reader.GetString(4) + "\t " + reader.GetString(5) + "\r\n";
+
+                        else
+                            Console.WriteLine("No rows found.");
+                        reader.Close();
+
+                    }
+                    break;
+
                 case 2:
                     if ((textBox1.Text.Length > 0 == true) ||
                     (textBox2.Text.Length > 0 == true) ||
@@ -309,7 +335,8 @@ namespace SQL_project
                         OracleDataReader reader = cmd2.ExecuteReader();
                         if (reader.HasRows)
                             while (reader.Read())
-                                this.richTextBox1.Text += "\t " + reader.GetString(0) + "\t " + reader.GetString(1) + "\r\n";
+                                this.richTextBox1.Text += "\t " + reader.GetString(0) + "\t " + reader.GetString(1) + "\t "
+                                   + reader.GetString(2) + "\t " + reader.GetString(3) + "\t " + reader.GetString(4) + "\t " + reader.GetString(5) + "\r\n";
                         else
                             Console.WriteLine("No rows found.");
                         reader.Close();
@@ -320,17 +347,23 @@ namespace SQL_project
                 case 4:
                     OracleCommand cmd3 = mainForm.mainForm.con.CreateCommand();
                     cmd3.CommandText = "select * from " + entity[this.type];
-                    cmd3.CommandText = cmd3.CommandText.Substring(0, cmd3.CommandText.Length - 1);
                     OracleDataReader reader1 = cmd3.ExecuteReader();
                     if (reader1.HasRows)
                         while (reader1.Read())
-                            this.richTextBox1.Text += "\t " + reader1.GetString(0) + "\t " + reader1.GetString(1) + "\r\n";
+                            this.richTextBox1.Text += "\t " + reader1.GetString(0) + "\t " + reader1.GetString(1) + "\t "
+                                   + reader1.GetString(2) + "\t " + reader1.GetString(3) + "\t " + reader1.GetString(4) + "\t " + reader1.GetString(5) + "\r\n";
                     else
                         Console.WriteLine("No rows found.");
                     reader1.Close();
                     break;
             }
             
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.mainForm.Show();
+            this.Close();
         }
     }
 }
