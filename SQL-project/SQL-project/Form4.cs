@@ -89,12 +89,17 @@ namespace SQL_project
                     (textBox5.Text.Length > 0 == textBox5.Visible) &&
                     (textBox6.Text.Length > 0 == textBox6.Visible)) //pola wymagane są 
                     {
-                        if (this.button1.Text == "Add car")
+                        switch (this.type)
                         {
-                            int result = 0;
-                            try
-                            {
-                                result = Int32.Parse(this.textBox4.Text);
+                            case 0:
+                                int result = 0;
+                                try { result = Int32.Parse(this.textBox4.Text); }
+                                catch (FormatException)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'Rocznik'");
+                                    Console.WriteLine("Podaj liczbe w polu 'Rocznik'");
+                                    break;
+                                }
                                 OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "nowySamochod";
                                 cmd.CommandType = CommandType.StoredProcedure;
@@ -112,66 +117,32 @@ namespace SQL_project
 
                                     throw;
                                 }
-
-                            }
-                            catch (FormatException)
-                            {
-                                Console.WriteLine("Podaj liczbe w polu 'Rocznik'");
-                            }
-
-
-
-                        }
-                        else if (this.button1.Text == "Add car rental")
-                        {
-                            OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
-                            cmd.CommandText = "nowaWypozyczalnia";
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add("vNazwa", OracleDbType.Varchar2).Value = this.textBox1.Text;
-                            cmd.Parameters.Add("vAdres", OracleDbType.Varchar2).Value = this.textBox2.Text;
-                            try
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                            catch (Exception)
-                            {
-
-                                throw;
-                            }
-                        }
-                        else if (this.button1.Text == "Add car repair shop")
-                        {
-                            OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
-                            cmd.CommandText = "nowyWarsztat";
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add("vNazwa", OracleDbType.Varchar2).Value = this.textBox1.Text;
-                            cmd.Parameters.Add("vAdres", OracleDbType.Varchar2).Value = this.textBox2.Text;
-                            try
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                            catch (Exception)
-                            {
-
-                                throw;
-                            }
-                        }
-
-                        else if (this.button1.Text == "Add repair")
-                        {
-                            //TO DO
-                        }
-                        else if (this.button1.Text == "Add customer")
-                        {
-                            try
-                            {
-                                int pesel = Int32.Parse(this.textBox3.Text);
-                                OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
-                                cmd.CommandText = "nowyKlient";
+                                break;
+                            case 1:
+                                cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "nowaWypozyczalnia";
                                 cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox1.Text;
-                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox2.Text;
-                                cmd.Parameters.Add("vPesel", OracleDbType.Decimal).Value = pesel;
+                                cmd.Parameters.Add("vNazwa", OracleDbType.Varchar2).Value = this.textBox1.Text;
+                                cmd.Parameters.Add("vAdres", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                }
+                                catch (Exception jj)
+                                {
+                                    if (jj.Message.Substring(0, 9) == "ORA-00001")
+                                    {
+                                        MessageBox.Show("Istnieje wypozyczalnia o takiej nazwie");
+                                        Console.WriteLine("Istnieje wypozyczalnia o takiej nazwie");
+                                    }
+                                }
+                                break;
+                            case 2:
+                                cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "nowyWarsztat";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vNazwa", OracleDbType.Varchar2).Value = this.textBox1.Text;
+                                cmd.Parameters.Add("vAdres", OracleDbType.Varchar2).Value = this.textBox2.Text;
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
@@ -181,21 +152,49 @@ namespace SQL_project
 
                                     throw;
                                 }
-                            }
-                            catch (Exception)
-                            {
+                                
+                                break;
+                            case 3:
 
-                                throw;
-                            }
+                            //TO DO
+                                break;
+                            case 4:
+                                int pesel;
+                                try { pesel = Int32.Parse(this.textBox3.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'PESEL'");
+                                    break;
+                                }
+                                cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "nowyKlient";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox1.Text;
+                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vPesel", OracleDbType.Decimal).Value = pesel;
+                                try{cmd.ExecuteNonQuery(); }
+                                catch (Exception)
+                                {
 
-                        }
-                        else if (this.button1.Text == "Add worker")
-                        {
-                            try
-                            {
-                                int pesel = Int32.Parse(this.textBox3.Text);
-                                int placa = Int32.Parse(this.textBox4.Text);
-                                OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
+                                    throw;
+                                }
+                                
+                                break;
+                            case 5:
+                                int placa;
+                                try{ pesel = Int32.Parse(this.textBox3.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'PESEL'");
+                                    break;
+                                }
+                                try { placa = Int32.Parse(this.textBox4.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'Placa'");
+                                    break;
+                                }
+                                cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "nowyPracownik";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox1.Text;
@@ -207,68 +206,77 @@ namespace SQL_project
                                 {
                                     cmd.ExecuteNonQuery();
                                 }
+                                catch (Exception hh)
+                                {
+
+                                    throw;
+                                }
+                                break;
+                            case 6:
+                                int cena;
+                                int rabat;
+                                try{ cena = Int32.Parse(this.textBox2.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'Cena'");
+                                    break;
+                                }
+                                try { rabat = Int32.Parse(this.textBox3.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'Rabat'");
+                                    break;
+                                }
+                                cmd = mainForm.mainForm.con.CreateCommand();
+                                DateTime dt = new DateTime(2012, 5, 7, 12, 23, 22, 0);
+                                cmd.CommandText = "noweZlecenieSprzedazy";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vDataSprzedazy", OracleDbType.Date).Value = dt;
+
+                                cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
+                                cmd.Parameters.Add("vRabat", OracleDbType.Decimal).Value = rabat;
+                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox4.Text;
+                                cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                }
                                 catch (Exception)
                                 {
 
                                     throw;
                                 }
-                            }
-                            catch (Exception)
-                            {
-                                throw;
-                            }
+                                break;
+                            case 7:
+                                try { cena = Int32.Parse(this.textBox1.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'Cena'");
+                                    break;
+                                }
+                                cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "noweZlecenieWynajmu";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
+                                cmd.Parameters.Add("vDataWynajmu", OracleDbType.Date).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vDataOddania", OracleDbType.Date).Value = this.textBox3.Text;
+                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox4.Text;
+                                cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                }
+                                catch (Exception)
+                                {
+
+                                    throw;
+                                }
+                                break;
                         }
-                        else if (this.button1.Text == "Add sell transaction")
-                        {
-                            int cena = Int32.Parse(this.textBox2.Text);
-                            int rabat = Int32.Parse(this.textBox3.Text);
-                            OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
-
-                            DateTime dt = new DateTime(2012, 5, 7, 12, 23, 22, 0);
-
-
-
-                            cmd.CommandText = "noweZlecenieSprzedazy";
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add("vDataSprzedazy", OracleDbType.Date).Value = dt;
-
-                            cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
-                            cmd.Parameters.Add("vRabat", OracleDbType.Decimal).Value = rabat;
-                            cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox4.Text;
-                            cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox5.Text;
-                            try
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                            catch (Exception)
-                            {
-
-                                throw;
-                            }
-                        }
-
-                        else if (this.button1.Text == "Add rent transaction")
-                        {
-                            int cena = Int32.Parse(this.textBox1.Text);
-                            OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
-                            cmd.CommandText = "noweZlecenieWynajmu";
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
-                            cmd.Parameters.Add("vDataWynajmu", OracleDbType.Date).Value = this.textBox2.Text;
-                            cmd.Parameters.Add("vDataOddania", OracleDbType.Date).Value = this.textBox3.Text;
-                            cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox4.Text;
-                            cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox5.Text;
-                            try
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                            catch (Exception)
-                            {
-
-                                throw;
-                            }
-
-                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Wypelnij wszystkie pola");
                     }
                     break;
                 case 1:
@@ -295,16 +303,13 @@ namespace SQL_project
                             }
                         }
                         cmd2.CommandText = cmd2.CommandText.Substring(0, cmd2.CommandText.Length - 4);
-                        OracleDataReader reader = cmd2.ExecuteReader();
-                        if (reader.HasRows)
-                            while (reader.Read())
-                                this.richTextBox1.Text += "\t " + reader.GetString(0) + "\t " + reader.GetString(1) + "\t "
-                                    + reader.GetString(2) + "\t " + reader.GetString(3) + "\t " + reader.GetString(4) + "\t " + reader.GetString(5) + "\r\n";
+                        cmd2.ExecuteReader();
+                        
 
-                        else
-                            Console.WriteLine("No rows found.");
-                        reader.Close();
-
+                    }
+                    else
+                    {
+                        MessageBox.Show("Przynajmniej jedno pole musi byc wypelnione");
                     }
                     break;
 
@@ -334,13 +339,28 @@ namespace SQL_project
                         cmd2.CommandText = cmd2.CommandText.Substring(0, cmd2.CommandText.Length - 1);
                         OracleDataReader reader = cmd2.ExecuteReader();
                         if (reader.HasRows)
+                        {
+                            this.richTextBox1.Text = "";
                             while (reader.Read())
-                                this.richTextBox1.Text += "\t " + reader.GetString(0) + "\t " + reader.GetString(1) + "\t "
-                                   + reader.GetString(2) + "\t " + reader.GetString(3) + "\t " + reader.GetString(4) + "\t " + reader.GetString(5) + "\r\n";
+                            {
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    this.richTextBox1.Text += reader.GetString(i) + "; ";
+                                }
+                                this.richTextBox1.Text += "\n";
+                            }
+                        }
                         else
+                        {
                             Console.WriteLine("No rows found.");
+                            this.richTextBox1.Text += "Zadanych wierszy nie znaleziono";
+                        }
                         reader.Close();
 
+                    }
+                    else
+                    {
+                        MessageBox.Show("Przynajmniej jedno pole musi byc wypelnione");
                     }
                     break;
 
@@ -349,11 +369,22 @@ namespace SQL_project
                     cmd3.CommandText = "select * from " + entity[this.type];
                     OracleDataReader reader1 = cmd3.ExecuteReader();
                     if (reader1.HasRows)
+                    {
+                        this.richTextBox1.Text = "";
                         while (reader1.Read())
-                            this.richTextBox1.Text += "\t " + reader1.GetString(0) + "\t " + reader1.GetString(1) + "\t "
-                                   + reader1.GetString(2) + "\t " + reader1.GetString(3) + "\t " + reader1.GetString(4) + "\t " + reader1.GetString(5) + "\r\n";
+                        {
+                            for (int i = 0; i < reader1.FieldCount; i++)
+                            {
+                                this.richTextBox1.Text += reader1.GetString(i) + "; ";
+                            }
+                            this.richTextBox1.Text += "\n";
+                        }
+                    }
                     else
+                    {
                         Console.WriteLine("No rows found.");
+                        this.richTextBox1.Text += "Brak wierszy";
+                    }
                     reader1.Close();
                     break;
             }
