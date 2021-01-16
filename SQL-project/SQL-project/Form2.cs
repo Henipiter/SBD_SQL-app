@@ -40,6 +40,7 @@ namespace SQL_project
                     this.SellTransactionButton.Enabled = false;
                     this.RentTransactionButton.Enabled = false;
                     this.cancelButton.Enabled = false;
+                    this.PartButton.Enabled = false;
 
                     this.AddButton.Enabled = true;
                     this.DeleteButton.Enabled = true;
@@ -57,6 +58,7 @@ namespace SQL_project
                     this.SellTransactionButton.Enabled = true;
                     this.RentTransactionButton.Enabled = true;
                     this.cancelButton.Enabled = true;
+                    this.PartButton.Enabled = true;
                     if (switch2 != 1)
                         this.AddButton.Enabled = false;
                     if (switch2 != 2)
@@ -111,7 +113,7 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 0;
-            string[] labels = { "VNumer_VIN", "VMarka", "VModel", "NRocznik", "VNazwa_wypozyczalni", ""};
+            string[] labels = { "VNumer_VIN", "VMarka", "VModel", "NRocznik", "VNazwa_wypozyczalni_posiadajacej", ""};
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -129,7 +131,7 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 2;
-            string[] labels = { "VNazwa", "VAdres", "", "", "", "" };
+            string[] labels = { "VNazwa_warsztatu", "VAdres_warsztanu", "", "", "", "" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -139,7 +141,7 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 3;
-            string[] labels = { "*Numer_naprawy", "DData_naprawy", "NCena_robocizny", "VNazwa_warsztatu", "VNumer_VIN", "" };
+            string[] labels = { "NNr_naprawy", "DData_naprawy", "NCena_robocizny", "VNazwa_warsztatu_naprawiajacego", "VNr_VIN_naprawianego_samochodu", "" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -149,7 +151,7 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 4;
-            string[] labels = {"*ID", "VImie", "VNazwisko", "NPESEL", "", "", "" };
+            string[] labels = {"NID_klienta", "VImie_klienta", "VNazwisko_klienta", "NPESEL_klienta", "", "", "" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -159,7 +161,7 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 5;
-            string[] labels = {"*ID", "VImie", "VNazwisko", "NPesel", "NPlaca", "VNazwa_wypozyczalni" };
+            string[] labels = {"NID_pracownika", "VImie_pracownika", "VNazwisko_pracownika", "NPesel_pracownika", "NPlaca", "VNazwa_wypozyczalni" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -169,7 +171,7 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 6;
-            string[] labels = { "*Numer_zlecenia", "DData_sprzedazy", "NCena", "NRabat", "VVIN", "NID_klienta" };
+            string[] labels = { "NNr_zlecenia_sprzedazy", "DData_sprzedazy", "NCena", "NPrzyznany_Rabat", "VNr_VIN_sprzedawanego_samochodu", "NID_klienta_kupujacego" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -179,7 +181,7 @@ namespace SQL_project
             this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 7;
-            string[] labels = { "*Numer_zlecenia", "NCena", "DData_wynajmu", "DData_oddania", "VVIN", "NID_klienta" };
+            string[] labels = { "NNr_zlecenia_wynajmu", "NCena", "DData_wynajmu", "DData_oddania", "VNr_VIN_wynajmowanego_samochodu", "NID_klienta_wynajmujacego" };
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
@@ -189,6 +191,14 @@ namespace SQL_project
             this.ButtonsDefaultSettings(0, 5);
         }
 
-        
+        private void PartButton_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            this.ButtonsDefaultSettings(0, 5);
+            this.type = 9;
+            string[] labels = { "NNumer_naprawy", "VNazwa_elementu", "NCena", "", "", "" };
+            Form4 formularz = new Form4(this, this.function, this.type, labels);
+            formularz.Show();
+        }
     }
 }

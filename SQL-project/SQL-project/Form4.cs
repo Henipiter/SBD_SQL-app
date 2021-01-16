@@ -17,10 +17,10 @@ namespace SQL_project
         private int type;
         private string[] operators = { "Add", "Delete", "Search", "Modify", "Show" };
         private string[] entity = { "samochody", "wypozyczalnie", "warsztaty", "naprawy", "klienci", "pracownicy_wypozyczalni", "zlecenia_sprzedazy", "zlecenia_wynajmu"};
-        private string[] name = { "car", "car rental", "car repair shop", "repair", "customer", "worker", "sell transaction", "rent transaction" };
-        private int[] labels = new int[6];
-        private int[] textBoxes = new int[6];
-        private char[] format = new char[6];
+        private string[] name = { "car", "car rental", "car repair shop", "repair", "customer", "worker", "sell transaction", "rent transaction","part repair","part repair" };
+        private int[] labels = new int[8];
+        private int[] textBoxes = new int[8];
+        private char[] format = new char[8];
         private Form2 mainForm = null;
         public Form4(Form mainF, int func, int type, string[] labels)
         {
@@ -34,28 +34,74 @@ namespace SQL_project
             for (int k=0; k < this.Controls.Count; k++) 
             {
                 form = this.Controls[k];
-                if (form.Name.Length>5 && form.Name.Substring(0,5) == "label")
+                if (form.Name.Length > 5 && form.Name.Substring(0, 5) == "label")
                 {
-                    int g = (int)Char.GetNumericValue(form.Name[5]) -1;
-                    this.labels[g] = k;
-                    if (labels[g].Length == 0 || function == 4)
-                        ((Label)form).Visible = false;
-                    else
+
+                    int g = (int)Char.GetNumericValue(form.Name[5]) - 1;
+                    if (g < 6)
                     {
-                        this.format[g] = labels[g][0];
-                        ((Label)form).Text = labels[g].Substring(1);
+                        this.labels[g] = k;
+                        if (labels[g].Length == 0 || function == 4)
+                            ((Label)form).Visible = false;
+                        else
+                        {
+                            this.format[g] = labels[g][0];
+                            ((Label)form).Text = labels[g].Substring(1);
+                        }
                     }
                 }
                 else if (form.Name.Length > 7 && form.Name.Substring(0, 7) == "textBox")
                 {
                     int g = (int)Char.GetNumericValue(form.Name[7]) - 1;
-                    this.textBoxes[g] = k;
-                    if (labels[g].Length == 0 || function == 4)
-                        ((TextBox)form).Visible = false;
+                    if (g < 6)
+                    {
+                        this.textBoxes[g] = k;
+                        if (labels[g].Length == 0 || function == 4)
+                            ((TextBox)form).Visible = false;
+                    }
                 }
             }
+            if (this.button1.Text == "Add repair" || this.button1.Text == "Add rent transaction" || this.button1.Text == "Add customer" || this.button1.Text == "Add sell transaction" || this.button1.Text == "Add worker")
+            {
+                this.label1.Visible = false;
+                this.textBox1.Visible = false;
+            }
+            if (this.button1.Text == "Add part repair")
+            {
+                this.label7.Visible = true;
+                this.textBox8.Visible = true;
+                this.label8.Visible = true;
+                this.textBox7.Visible = true;
+                this.label2.Visible = false;
+                this.label3.Visible = false;
+                this.textBox2.Visible = false;
+                this.textBox3.Visible = false;
+            }
+            if (this.button1.Text == "Delete worker")
+            {
+                this.label2.Visible = false;
+                this.textBox2.Visible = false;
+                this.label3.Visible = false;
+                this.textBox3.Visible = false;
+                this.label4.Visible = false;
+                this.textBox4.Visible = false;
+                this.label5.Visible = false;
+                this.textBox5.Visible = false;
+                this.label6.Visible = false;
+                this.textBox6.Visible = false;
+            }
         }
-
+        private void CleanTextBoxes()
+        {
+            this.textBox1.Text = "";
+            this.textBox2.Text = "";
+            this.textBox3.Text = "";
+            this.textBox4.Text = "";
+            this.textBox5.Text = "";
+            this.textBox6.Text = "";
+            this.textBox7.Text = "";
+            this.textBox8.Text = "";
+        }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
@@ -111,6 +157,7 @@ namespace SQL_project
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception)
                                 {
@@ -127,6 +174,7 @@ namespace SQL_project
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception jj)
                                 {
@@ -146,6 +194,7 @@ namespace SQL_project
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception)
                                 {
@@ -154,13 +203,10 @@ namespace SQL_project
                                 }
                                 
                                 break;
-                            case 3:
 
-                            //TO DO
-                                break;
                             case 4:
                                 int pesel;
-                                try { pesel = Int32.Parse(this.textBox3.Text); }
+                                try { pesel = Int32.Parse(this.textBox4.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'PESEL'");
@@ -169,10 +215,14 @@ namespace SQL_project
                                 cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "nowyKlient";
                                 cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox1.Text;
-                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox3.Text;
                                 cmd.Parameters.Add("vPesel", OracleDbType.Decimal).Value = pesel;
-                                try{cmd.ExecuteNonQuery(); }
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
+                                }
                                 catch (Exception)
                                 {
 
@@ -182,13 +232,13 @@ namespace SQL_project
                                 break;
                             case 5:
                                 int placa;
-                                try{ pesel = Int32.Parse(this.textBox3.Text); }
+                                try{ pesel = Int32.Parse(this.textBox4.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'PESEL'");
                                     break;
                                 }
-                                try { placa = Int32.Parse(this.textBox4.Text); }
+                                try { placa = Int32.Parse(this.textBox5.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Placa'");
@@ -197,14 +247,15 @@ namespace SQL_project
                                 cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "nowyPracownik";
                                 cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox1.Text;
-                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vImie", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                                cmd.Parameters.Add("vNazwisko", OracleDbType.Varchar2).Value = this.textBox3.Text;
                                 cmd.Parameters.Add("vPesel", OracleDbType.Decimal).Value = pesel;
                                 cmd.Parameters.Add("vPlaca", OracleDbType.Decimal).Value = placa;
-                                cmd.Parameters.Add("vNazwaWypozyczalni", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                cmd.Parameters.Add("vNazwaWypozyczalni", OracleDbType.Varchar2).Value = this.textBox6.Text;
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception hh)
                                 {
@@ -215,31 +266,44 @@ namespace SQL_project
                             case 6:
                                 int cena;
                                 int rabat;
-                                try{ cena = Int32.Parse(this.textBox2.Text); }
+                                try{ cena = Int32.Parse(this.textBox3.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Cena'");
                                     break;
                                 }
-                                try { rabat = Int32.Parse(this.textBox3.Text); }
+                                try { rabat = Int32.Parse(this.textBox4.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Rabat'");
                                     break;
                                 }
                                 cmd = mainForm.mainForm.con.CreateCommand();
-                                DateTime dt = new DateTime(2012, 5, 7, 12, 23, 22, 0);
+                                
+                                int rok, miesiac, dzien;
+                                try {
+                                    rok = Int32.Parse(this.textBox2.Text.Substring(0, 4));
+                                    miesiac = Int32.Parse(this.textBox2.Text.Substring(5, 2));
+                                    dzien = Int32.Parse(this.textBox2.Text.Substring(8, 2));
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj odpowiedni format zapisu daty");
+                                    break;
+                                }
+                                DateTime dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
                                 cmd.CommandText = "noweZlecenieSprzedazy";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Parameters.Add("vDataSprzedazy", OracleDbType.Date).Value = dt;
 
                                 cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
                                 cmd.Parameters.Add("vRabat", OracleDbType.Decimal).Value = rabat;
-                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox4.Text;
-                                cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox6.Text;
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception)
                                 {
@@ -254,17 +318,145 @@ namespace SQL_project
                                     MessageBox.Show("Podaj liczbe w polu 'Cena'");
                                     break;
                                 }
+                                int rok2, miesiac2, dzien2;
+                                try
+                                {
+                                    rok = Int32.Parse(this.textBox3.Text.Substring(0, 4));
+                                    miesiac = Int32.Parse(this.textBox3.Text.Substring(5, 2));
+                                    dzien = Int32.Parse(this.textBox3.Text.Substring(8, 2));
+                                    dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj odpowiedni format zapisu daty wynajmu");
+                                    break;
+                                }
+                                DateTime dt2;
+                                try
+                                {
+                                    rok2 = Int32.Parse(this.textBox4.Text.Substring(0, 4));
+                                    miesiac2 = Int32.Parse(this.textBox4.Text.Substring(5, 2));
+                                    dzien2 = Int32.Parse(this.textBox4.Text.Substring(8, 2));
+                                    dt2 = new DateTime(rok2, miesiac2, dzien2, 12, 23, 22, 0);
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj odpowiedni format zapisu daty wynajmu");
+                                    break;
+                                }
                                 cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "noweZlecenieWynajmu";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
-                                cmd.Parameters.Add("vDataWynajmu", OracleDbType.Date).Value = this.textBox2.Text;
-                                cmd.Parameters.Add("vDataOddania", OracleDbType.Date).Value = this.textBox3.Text;
-                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox4.Text;
-                                cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                cmd.Parameters.Add("vDataWynajmu", OracleDbType.Date).Value = dt;
+                                cmd.Parameters.Add("vDataOddania", OracleDbType.Date).Value = dt2;
+                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                cmd.Parameters.Add("vIDklienta", OracleDbType.Varchar2).Value = this.textBox6.Text;
                                 try
                                 {
                                     cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
+                                }
+                                catch (Exception)
+                                {
+
+                                    throw;
+                                }
+                                break;
+                            case 3:
+                                try { cena = Int32.Parse(this.textBox3.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'Cena'");
+                                    break;
+                                }
+                                try
+                                {
+                                    rok = Int32.Parse(this.textBox2.Text.Substring(0, 4));
+                                    miesiac = Int32.Parse(this.textBox2.Text.Substring(5, 2));
+                                    dzien = Int32.Parse(this.textBox2.Text.Substring(8, 2));
+                                    dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj odpowiedni format zapisu daty wynajmu");
+                                    break;
+                                }
+                                cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "nowaNaprawa1";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vDataNaprawy", OracleDbType.Date).Value = dt;
+                                cmd.Parameters.Add("vCenaRobocizny", OracleDbType.Decimal).Value = cena;
+                                cmd.Parameters.Add("vNazwaWarsztatu", OracleDbType.Varchar2).Value = this.textBox4.Text;
+                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
+                                    this.label7.Visible = true;
+                                    this.label8.Visible = true;
+                                    this.textBox7.Visible = true;
+                                    this.textBox8.Visible = true;
+                                    this.button1.Text = "Add parts";
+                                    this.type = 8;
+                                    this.label1.Visible = false;
+                                    this.textBox1.Visible = false;
+                                    this.label2.Visible = false;
+                                    this.textBox2.Visible = false;
+                                    this.label3.Visible = false;
+                                    this.textBox3.Visible = false;
+                                    this.label4.Visible = false;
+                                    this.textBox4.Visible = false;
+                                    this.label5.Visible = false;
+                                    this.textBox5.Visible = false;
+                                }
+                                catch (Exception)
+                                {
+
+                                    throw;
+                                }
+                                break;
+                            case 8:
+                                try { cena = Int32.Parse(this.textBox8.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'Cena'");
+                                    break;
+                                }
+                                cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "noweCzesci";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vNazwaElementu", OracleDbType.Varchar2).Value = this.textBox7.Text;
+                                cmd.Parameters.Add("vCenaElementu", OracleDbType.Varchar2).Value = cena;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
+                                }
+                                catch (Exception)
+                                {
+
+                                    throw;
+                                }
+                                break;
+                            case 9:
+                                try { cena = Int32.Parse(this.textBox8.Text); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu 'Cena'");
+                                    break;
+                                }
+                                int nrNaprawy = Int32.Parse(this.textBox1.Text);
+                                cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd.CommandText = "nowaCzesc";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("vNrNaprawy", OracleDbType.Decimal).Value = nrNaprawy;
+                                cmd.Parameters.Add("vNazwaElementu", OracleDbType.Varchar2).Value = this.textBox7.Text;
+                                cmd.Parameters.Add("vCenaElementu", OracleDbType.Varchar2).Value = cena;
+                                try
+                                {
+                                    cmd.ExecuteNonQuery();
+                                    CleanTextBoxes();
                                 }
                                 catch (Exception)
                                 {
@@ -395,6 +587,16 @@ namespace SQL_project
         {
             this.mainForm.Show();
             this.Close();
+        }
+
+        private void textBox8_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
