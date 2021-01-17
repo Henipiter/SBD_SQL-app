@@ -26,6 +26,11 @@ namespace SQL_project
             {
                 argument = "'" + argument + "'";
             }
+            if (nameFunction.Length == 0)
+            {
+                MessageBox.Show("Uzupelnij pole");
+                return;
+            }
             OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
             //select ilenaprawdanysamochod('aaaaaaaaaaaaaaaaa') from dual;
             cmd.CommandText = "select "+nameFunction+"('"+argument+"') from dual" ;
@@ -89,6 +94,11 @@ namespace SQL_project
         private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
