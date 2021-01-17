@@ -18,7 +18,7 @@ namespace SQL_project
         private string[] operators = { "Add", "Delete", "Search", "Modify", "Show" };
         private string[] entity = { "samochody", "wypozyczalnie", "warsztaty", "naprawy", "klienci", "pracownicy_wypozyczalni", "zlecenia_sprzedazy", "zlecenia_wynajmu", "elementy_naprawiane", "elementy_naprawiane" };
         private string[] name = { "car", "car rental", "car repair shop", "repair", "customer", "worker", "sell transaction", "rent transaction","part repair","part repair" };
-        private string[] deleteProcedure = { "samochod", "wypozyczalnie", "warsztat", "naprawy", "klienta", "pracownika", "zleceniesprzedzazy", "zleceniewynajmu" };
+        private string[] deleteProcedure = { "samochod", "wypozyczalnie", "warsztat", "naprawy", "klienta", "pracownika", "zleceniesprzedzazy", "zleceniewynajmu" ,"element","element"};
         private string[] modifyProcedure = { "samochod","wypozyczalnie","warsztat","naprawe","klienta","pracownika","zleceniesprzedazy","zleceniewynajmu" };
         private int[] labels = new int[6];
         private int[] textBoxes = new int[6];
@@ -73,7 +73,17 @@ namespace SQL_project
                 this.label1.Visible = false;
                 this.textBox1.Visible = false;
             }
-            if (this.button1.Text == "Add part repair")
+            if (this.button1.Text == "Delete part repair") 
+            {
+                this.label2.Text = "Nazwa elementu";
+                this.label1.Visible = false;
+                this.textBox1.Visible = false;
+                this.label2.Visible = true;
+                this.textBox2.Visible = true;
+                this.label3.Visible = false;
+                this.textBox3.Visible = false;
+            }
+                if (this.button1.Text == "Add part repair")
             {
                 this.label7.Visible = true;
                 this.textBox8.Visible = true;
@@ -536,8 +546,9 @@ namespace SQL_project
                     }
                     break;
                 case 1:
-                    if ((textBox1.Text.Length > 0 == true) )
+                    if ((textBox1.Text.Length > 0 == true))
                     {
+
                         result = 0;
                         if (format[0] == 'N')
                         {
@@ -550,9 +561,9 @@ namespace SQL_project
                             }
                         }
                         cmd = mainForm.mainForm.con.CreateCommand();
-                        cmd.CommandText = "usun"+this.deleteProcedure[type];
+                        cmd.CommandText = "usun" + this.deleteProcedure[type];
                         cmd.CommandType = CommandType.StoredProcedure;
-                        if (format[0] == 'N') 
+                        if (format[0] == 'N')
                             cmd.Parameters.Add("vKlucz", OracleDbType.Decimal).Value = this.textBox1.Text;
                         else
                             cmd.Parameters.Add("vKlucz", OracleDbType.Varchar2).Value = this.textBox1.Text;
@@ -567,6 +578,24 @@ namespace SQL_project
                         }
                         break;
 
+                    }
+                    else if (textBox2.Text.Length > 0 == true) 
+                    {
+                        
+                        cmd = mainForm.mainForm.con.CreateCommand();
+                        cmd.CommandText = "usun" + this.deleteProcedure[type];
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("vKlucz", OracleDbType.Varchar2).Value = this.textBox2.Text;
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                            CleanTextBoxes();
+                        }
+                        catch (Exception q)
+                        {
+                            exceptionSevice(q);
+                        }
+                        break;
                     }
                     else
                     {
