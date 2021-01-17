@@ -200,5 +200,11 @@ namespace SQL_project
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
+
+        private void StatisticsButton_Click(object sender, EventArgs e)
+        {
+            Form5 frm = new Form5(this);
+            frm.Show();
+        }
     }
 }

@@ -44,6 +44,7 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
             this.PartButton = new System.Windows.Forms.Button();
+            this.StatisticsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AddButton
@@ -206,11 +207,22 @@
             this.PartButton.UseVisualStyleBackColor = true;
             this.PartButton.Click += new System.EventHandler(this.PartButton_Click);
             // 
+            // StatisticsButton
+            // 
+            this.StatisticsButton.Location = new System.Drawing.Point(29, 285);
+            this.StatisticsButton.Name = "StatisticsButton";
+            this.StatisticsButton.Size = new System.Drawing.Size(181, 31);
+            this.StatisticsButton.TabIndex = 16;
+            this.StatisticsButton.Text = "Statistics";
+            this.StatisticsButton.UseVisualStyleBackColor = true;
+            this.StatisticsButton.Click += new System.EventHandler(this.StatisticsButton_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(476, 448);
+            this.Controls.Add(this.StatisticsButton);
             this.Controls.Add(this.PartButton);
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.cancelButton);
@@ -251,5 +263,6 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button ExitButton;
         private System.Windows.Forms.Button PartButton;
+        private System.Windows.Forms.Button StatisticsButton;
     }
 }

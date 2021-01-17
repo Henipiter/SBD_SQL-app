@@ -85,3 +85,4 @@ C:\Users\micha\Desktop\ssss\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.cs
 C:\Users\micha\Desktop\ssss\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.csproj.CopyComplete
 C:\Users\micha\Desktop\ssss\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.exe
 C:\Users\micha\Desktop\ssss\SBD\SQL-project\SQL-project\obj\Debug\SQL-project.pdb
+C:\Users\micha\Desktop\ssss\SBD\SQL-project\SQL-project\obj\Debug\SQL_project.Form5.resources
