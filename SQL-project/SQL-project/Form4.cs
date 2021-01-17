@@ -554,7 +554,7 @@ namespace SQL_project
                 case 3:
                     result = 0;
                     cmd = mainForm.mainForm.con.CreateCommand();
-                    cmd.CommandText = "modyfikuj"+this.modifyProcedure;
+                    cmd.CommandText = "modyfikuj"+this.modifyProcedure[type];
                     cmd.CommandType = CommandType.StoredProcedure;
                     Control form1, form2;
                     for (int i = 0; i < 6; i++)
@@ -602,10 +602,10 @@ namespace SQL_project
                         cmd.ExecuteNonQuery();
                         CleanTextBoxes();
                     }
-                    catch (Exception)
+                    catch (Exception a)
                     {
 
-                        throw;
+                        MessageBox.Show(a.Message);
                     }
                         
                     break;
