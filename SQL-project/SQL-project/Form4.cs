@@ -19,6 +19,7 @@ namespace SQL_project
         private string[] entity = { "samochody", "wypozyczalnie", "warsztaty", "naprawy", "klienci", "pracownicy_wypozyczalni", "zlecenia_sprzedazy", "zlecenia_wynajmu"};
         private string[] name = { "car", "car rental", "car repair shop", "repair", "customer", "worker", "sell transaction", "rent transaction","part repair","part repair" };
         private string[] deleteProcedure = { "samochod", "wypozyczalnie", "warsztat", "naprawy", "klienta", "pracownika", "zleceniesprzedzazy", "zleceniewynajmu" };
+        private string[] modifyProcedure = { "samochod","wypozyczalnie","warsztat","naprawe","klienta","pracownika","zleceniesprzedazy","zleceniewynajmu" };
         private int[] labels = new int[6];
         private int[] textBoxes = new int[6];
         private char[] format = new char[6];
@@ -111,11 +112,13 @@ namespace SQL_project
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            
 
+            
             switch (this.function)
             {
                 case 0:
+                    OracleCommand cmd;
+                    int result;
                     if ((textBox1.Text.Length > 0 == textBox1.Visible) &&
                     (textBox2.Text.Length > 0 == textBox2.Visible) &&
                     (textBox3.Text.Length > 0 == textBox3.Visible) &&
@@ -126,7 +129,7 @@ namespace SQL_project
                         switch (this.type)
                         {
                             case 0:
-                                int result = 0;
+                                result = 0;
                                 try { result = Int32.Parse(this.textBox4.Text); }
                                 catch (FormatException)
                                 {
@@ -134,7 +137,7 @@ namespace SQL_project
                                     Console.WriteLine("Podaj liczbe w polu 'Rocznik'");
                                     break;
                                 }
-                                OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
+                                cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "nowySamochod";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Parameters.Add("vNazwa", OracleDbType.Varchar2).Value = this.textBox1.Text;
@@ -283,7 +286,6 @@ namespace SQL_project
                                 cmd.CommandText = "noweZlecenieSprzedazy";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Parameters.Add("vDataSprzedazy", OracleDbType.Date).Value = dt;
-
                                 cmd.Parameters.Add("vCena", OracleDbType.Decimal).Value = cena;
                                 cmd.Parameters.Add("vRabat", OracleDbType.Decimal).Value = rabat;
                                 cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
@@ -460,15 +462,9 @@ namespace SQL_project
                     }
                     break;
                 case 1:
-                    if ((textBox1.Text.Length > 0 == true) ||
-                    (textBox2.Text.Length > 0 == true) ||
-                    (textBox3.Text.Length > 0 == true) ||
-                    (textBox4.Text.Length > 0 == true) ||
-                    (textBox5.Text.Length > 0 == true) ||
-                    (textBox6.Text.Length > 0 == true))
-
+                    if ((textBox1.Text.Length > 0 == true) )
                     {
-                        int result = 0;
+                        result = 0;
                         if (format[0] == 'N')
                         {
                             try { result = Int32.Parse(this.textBox1.Text); }
@@ -479,7 +475,7 @@ namespace SQL_project
                                 break;
                             }
                         }
-                        OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
+                        cmd = mainForm.mainForm.con.CreateCommand();
                         cmd.CommandText = "usun"+this.deleteProcedure[type];
                         cmd.CommandType = CommandType.StoredProcedure;
                         if (format[0] == 'N') 
@@ -556,7 +552,62 @@ namespace SQL_project
                     }
                     break;
                 case 3:
+                    result = 0;
+                    cmd = mainForm.mainForm.con.CreateCommand();
+                    cmd.CommandText = "modyfikuj"+this.modifyProcedure;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    Control form1, form2;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        form1 = this.Controls[labels[i]];
+                        if (((Label)form1).Visible)
+                        {
+                            form2 = this.Controls[textBoxes[i]];
+                            if (format[i] == 'V')
+                            {
+                                cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Varchar2).Value = ((TextBox)form2).Text;
+                            }
+                            else if (format[i] == 'N')
+                            {
+                                try { result = Int32.Parse(((TextBox)form2).Text); }
+                                catch (FormatException)
+                                {
+                                    MessageBox.Show("Podaj liczbe w polu " + ((Label)form1).Text);
+                                    Console.WriteLine("Podaj liczbe we wlasciwym polu'");
+                                    break;
+                                }
+                                cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Decimal).Value = result;
+                            }
+                            else
+                            {
+                                int rok, miesiac, dzien;
+                                try
+                                {
+                                    rok = Int32.Parse(((TextBox)form2).Text.Substring(0, 4));
+                                    miesiac = Int32.Parse(((TextBox)form2).Text.Substring(5, 2));
+                                    dzien = Int32.Parse(((TextBox)form2).Text.Substring(8, 2));
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj odpowiedni format zapisu daty w polu " + ((Label)form1).Text);
+                                    break;
+                                }
+                                DateTime dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
+                                cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Date).Value = dt;
+                            }
+                        }
+                    }
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        CleanTextBoxes();
+                    }
+                    catch (Exception)
+                    {
 
+                        throw;
+                    }
+                        
                     break;
                 case 4:
                     OracleCommand cmd3 = mainForm.mainForm.con.CreateCommand();
