@@ -16,13 +16,14 @@ namespace SQL_project
         private int function;
         private int type;
         private string[] operators = { "Add", "Delete", "Search", "Modify", "Show" };
-        private string[] entity = { "samochody", "wypozyczalnie", "warsztaty", "naprawy", "klienci", "pracownicy_wypozyczalni", "zlecenia_sprzedazy", "zlecenia_wynajmu"};
+        private string[] entity = { "samochody", "wypozyczalnie", "warsztaty", "naprawy", "klienci", "pracownicy_wypozyczalni", "zlecenia_sprzedazy", "zlecenia_wynajmu", "elementy_naprawiane", "elementy_naprawiane" };
         private string[] name = { "car", "car rental", "car repair shop", "repair", "customer", "worker", "sell transaction", "rent transaction","part repair","part repair" };
         private string[] deleteProcedure = { "samochod", "wypozyczalnie", "warsztat", "naprawy", "klienta", "pracownika", "zleceniesprzedzazy", "zleceniewynajmu" };
         private string[] modifyProcedure = { "samochod","wypozyczalnie","warsztat","naprawe","klienta","pracownika","zleceniesprzedazy","zleceniewynajmu" };
         private int[] labels = new int[6];
         private int[] textBoxes = new int[6];
         private char[] format = new char[6];
+        private bool[] key = new bool[6];
         private Form2 mainForm = null;
         public Form4(Form mainF, int func, int type, string[] labels)
         {
@@ -47,8 +48,12 @@ namespace SQL_project
                             ((Label)form).Visible = false;
                         else
                         {
-                            this.format[g] = labels[g][0];
-                            ((Label)form).Text = labels[g].Substring(1);
+                            this.format[g] = labels[g][1];
+                            if (labels[g][0] == '*')
+                                this.key[g] = true;
+                            else
+                                this.key[g] = false;
+                            ((Label)form).Text = Char.ToString(labels[g][0])+labels[g].Substring(2);
                         }
                     }
                 }
@@ -116,8 +121,27 @@ namespace SQL_project
             string code = a.Message.Substring(0, 9);
             if (code == "ORA-00001")
             {
-                MessageBox.Show("Istnieje wypozyczalnia o takiej nazwie");
-                Console.WriteLine("Istnieje wypozyczalnia o takiej nazwie");
+                MessageBox.Show("Istnieje identyfikator o takiej nazwie");
+            }
+            else if(code == "ORA-02291")
+            {
+                Control s;
+                string msg = "Nie istnieje identyfikator:\n ";
+                for(int i = 0; i < 6; i++)
+                {
+                    s = this.Controls[labels[i]];
+                    if (this.key[i] && ((Label)s).Visible)
+                        msg += ((Label)s).Text + " LUB\n";
+                }
+                msg = msg.Substring(0, msg.Length - 5);
+                MessageBox.Show(msg);
+
+            }
+            else if (code == "ORA-12899")
+            {
+                string msg = "Zbyt duzo znakow w polu ";
+                msg += a.Message.Split('"')[5];
+                MessageBox.Show(msg);
             }
 
         }
@@ -146,6 +170,16 @@ namespace SQL_project
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Rocznik'");
                                     Console.WriteLine("Podaj liczbe w polu 'Rocznik'");
+                                    break;
+                                }
+                                try
+                                {
+                                    if (this.textBox1.Text.Length != 17)
+                                        throw new Exception();
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Numer VIN musi miec 17 znakow");
                                     break;
                                 }
                                 cmd = mainForm.mainForm.con.CreateCommand();
@@ -201,8 +235,8 @@ namespace SQL_project
                                 break;
 
                             case 4:
-                                int pesel;
-                                try { pesel = Int32.Parse(this.textBox4.Text); }
+                                long pesel;
+                                try { pesel = Int64.Parse(this.textBox4.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'PESEL'");
@@ -227,7 +261,7 @@ namespace SQL_project
                                 break;
                             case 5:
                                 int placa;
-                                try{ pesel = Int32.Parse(this.textBox4.Text); }
+                                try{ pesel = Int64.Parse(this.textBox4.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'PESEL'");
@@ -273,7 +307,8 @@ namespace SQL_project
                                     break;
                                 }
                                 cmd = mainForm.mainForm.con.CreateCommand();
-                                
+                                DateTime dt;
+
                                 int rok, miesiac, dzien;
                                 try {
                                     rok = Int32.Parse(this.textBox2.Text.Substring(0, 4));
@@ -285,7 +320,15 @@ namespace SQL_project
                                     MessageBox.Show("Podaj odpowiedni format zapisu daty");
                                     break;
                                 }
-                                DateTime dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
+                                try
+                                {
+                                    dt = new DateTime(rok, miesiac, dzien, 0, 0, 0, 0);
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj wlasciwa date");
+                                    break;
+                                }
                                 cmd.CommandText = "noweZlecenieSprzedazy";
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Parameters.Add("vDataSprzedazy", OracleDbType.Date).Value = dt;
@@ -304,7 +347,7 @@ namespace SQL_project
                                 }
                                 break;
                             case 7:
-                                try { cena = Int32.Parse(this.textBox1.Text); }
+                                try { cena = Int32.Parse(this.textBox2.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Cena'");
@@ -316,11 +359,19 @@ namespace SQL_project
                                     rok = Int32.Parse(this.textBox3.Text.Substring(0, 4));
                                     miesiac = Int32.Parse(this.textBox3.Text.Substring(5, 2));
                                     dzien = Int32.Parse(this.textBox3.Text.Substring(8, 2));
-                                    dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
                                 }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj odpowiedni format zapisu daty wynajmu");
+                                    break;
+                                }
+                                try
+                                {
+                                    dt = new DateTime(rok, miesiac, dzien, 0, 0, 0, 0);
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj wlasciwa date");
                                     break;
                                 }
                                 DateTime dt2;
@@ -329,11 +380,19 @@ namespace SQL_project
                                     rok2 = Int32.Parse(this.textBox4.Text.Substring(0, 4));
                                     miesiac2 = Int32.Parse(this.textBox4.Text.Substring(5, 2));
                                     dzien2 = Int32.Parse(this.textBox4.Text.Substring(8, 2));
-                                    dt2 = new DateTime(rok2, miesiac2, dzien2, 12, 23, 22, 0);
                                 }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj odpowiedni format zapisu daty wynajmu");
+                                    break;
+                                }
+                                try
+                                {
+                                    dt2 = new DateTime(rok2, miesiac2, dzien2, 0, 0, 0, 0);
+                                }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Podaj wlasciwa date");
                                     break;
                                 }
                                 cmd = mainForm.mainForm.con.CreateCommand();
@@ -355,55 +414,71 @@ namespace SQL_project
                                 }
                                 break;
                             case 3:
-                                try { cena = Int32.Parse(this.textBox3.Text); }
-                                catch (Exception)
+                                if ((textBox1.Text.Length > 0 == textBox1.Visible) &&
+                                    (textBox2.Text.Length > 0 == textBox2.Visible) &&
+                                    (textBox3.Text.Length > 0 == textBox3.Visible) &&
+                                    (textBox4.Text.Length > 0 == textBox4.Visible) &&
+                                    (textBox5.Text.Length > 0 == textBox5.Visible) &&
+                                    (textBox6.Text.Length > 0 == textBox6.Visible)) //pola wymagane są 
                                 {
-                                    MessageBox.Show("Podaj liczbe w polu 'Cena'");
-                                    break;
-                                }
-                                try
-                                {
-                                    rok = Int32.Parse(this.textBox2.Text.Substring(0, 4));
-                                    miesiac = Int32.Parse(this.textBox2.Text.Substring(5, 2));
-                                    dzien = Int32.Parse(this.textBox2.Text.Substring(8, 2));
-                                    dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
-                                }
-                                catch (Exception)
-                                {
-                                    MessageBox.Show("Podaj odpowiedni format zapisu daty wynajmu");
-                                    break;
-                                }
-                                cmd = mainForm.mainForm.con.CreateCommand();
-                                cmd.CommandText = "nowaNaprawa1";
-                                cmd.CommandType = CommandType.StoredProcedure;
-                                cmd.Parameters.Add("vDataNaprawy", OracleDbType.Date).Value = dt;
-                                cmd.Parameters.Add("vCenaRobocizny", OracleDbType.Decimal).Value = cena;
-                                cmd.Parameters.Add("vNazwaWarsztatu", OracleDbType.Varchar2).Value = this.textBox4.Text;
-                                cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
-                                try
-                                {
-                                    cmd.ExecuteNonQuery();
-                                    CleanTextBoxes();
-                                    this.label7.Visible = true;
-                                    this.label8.Visible = true;
-                                    this.textBox7.Visible = true;
-                                    this.textBox8.Visible = true;
-                                    this.button1.Text = "Add parts";
-                                    this.type = 8;
-                                    this.label1.Visible = false;
-                                    this.textBox1.Visible = false;
-                                    this.label2.Visible = false;
-                                    this.textBox2.Visible = false;
-                                    this.label3.Visible = false;
-                                    this.textBox3.Visible = false;
-                                    this.label4.Visible = false;
-                                    this.textBox4.Visible = false;
-                                    this.label5.Visible = false;
-                                    this.textBox5.Visible = false;
-                                }
-                                catch (Exception q)
-                                {
-                                    exceptionSevice(q);
+                                    try { cena = Int32.Parse(this.textBox3.Text); }
+                                    catch (Exception)
+                                    {
+                                        MessageBox.Show("Podaj liczbe w polu 'Cena'");
+                                        break;
+                                    }
+                                    try
+                                    {
+                                        rok = Int32.Parse(this.textBox2.Text.Substring(0, 4));
+                                        miesiac = Int32.Parse(this.textBox2.Text.Substring(5, 2));
+                                        dzien = Int32.Parse(this.textBox2.Text.Substring(8, 2));
+                                    }
+                                    catch (Exception)
+                                    {
+                                        MessageBox.Show("Podaj odpowiedni format zapisu daty wynajmu");
+                                        break;
+                                    }
+                                    try
+                                    {
+                                        dt = new DateTime(rok, miesiac, dzien, 0, 0, 0, 0);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        MessageBox.Show("Podaj wlasciwa date");
+                                        break;
+                                    }
+                                    cmd = mainForm.mainForm.con.CreateCommand();
+                                    cmd.CommandText = "nowaNaprawa1";
+                                    cmd.CommandType = CommandType.StoredProcedure;
+                                    cmd.Parameters.Add("vDataNaprawy", OracleDbType.Date).Value = dt;
+                                    cmd.Parameters.Add("vCenaRobocizny", OracleDbType.Decimal).Value = cena;
+                                    cmd.Parameters.Add("vNazwaWarsztatu", OracleDbType.Varchar2).Value = this.textBox4.Text;
+                                    cmd.Parameters.Add("vNrVIN", OracleDbType.Varchar2).Value = this.textBox5.Text;
+                                    try
+                                    {
+                                        cmd.ExecuteNonQuery();
+                                        CleanTextBoxes();
+                                        this.label7.Visible = true;
+                                        this.label8.Visible = true;
+                                        this.textBox7.Visible = true;
+                                        this.textBox8.Visible = true;
+                                        this.button1.Text = "Add parts";
+                                        this.type = 8;
+                                        this.label1.Visible = false;
+                                        this.textBox1.Visible = false;
+                                        this.label2.Visible = false;
+                                        this.textBox2.Visible = false;
+                                        this.label3.Visible = false;
+                                        this.textBox3.Visible = false;
+                                        this.label4.Visible = false;
+                                        this.textBox4.Visible = false;
+                                        this.label5.Visible = false;
+                                        this.textBox5.Visible = false;
+                                    }
+                                    catch (Exception q)
+                                    {
+                                        exceptionSevice(q);
+                                    }
                                 }
                                 break;
                             case 8:
@@ -515,14 +590,17 @@ namespace SQL_project
                         {
                             if (this.Controls[textBoxes[i]].Text.Length>0)
                             {
-                                cmd2.CommandText += this.Controls[labels[i]].Text + "=";
-                                if (format[i] == 'N')
-                                    cmd2.CommandText += this.Controls[textBoxes[i]].Text + ",";
-                                else
-                                    cmd2.CommandText += "'" + this.Controls[textBoxes[i]].Text + "',";
+                                cmd2.CommandText += this.Controls[labels[i]].Text.Substring(1) + "=";
+                                if (format[i] == 'V')
+                                    cmd2.CommandText += "'" + this.Controls[textBoxes[i]].Text + "' and ";
+                                
+                                else if (format[i] == 'N')
+                                    cmd2.CommandText += this.Controls[textBoxes[i]].Text + " and ";
+                                else if (format[i] == 'D')
+                                    cmd2.CommandText += "'"+ this.Controls[textBoxes[i]].Text.Substring(0,4) + this.Controls[textBoxes[i]].Text.Substring(5, 2) + this.Controls[textBoxes[i]].Text.Substring(8,2) + "' and ";
                             }
                         }
-                        cmd2.CommandText = cmd2.CommandText.Substring(0, cmd2.CommandText.Length - 1);
+                        cmd2.CommandText = cmd2.CommandText.Substring(0, cmd2.CommandText.Length - 5);
                         OracleDataReader reader = cmd2.ExecuteReader();
                         if (reader.HasRows)
                         {
@@ -539,7 +617,7 @@ namespace SQL_project
                         else
                         {
                             Console.WriteLine("No rows found.");
-                            this.richTextBox1.Text += "Zadanych wierszy nie znaleziono";
+                            this.richTextBox1.Text = "Zadanych wierszy nie znaleziono";
                         }
                         reader.Close();
 
@@ -550,61 +628,77 @@ namespace SQL_project
                     }
                     break;
                 case 3:
-                    result = 0;
-                    cmd = mainForm.mainForm.con.CreateCommand();
-                    cmd.CommandText = "modyfikuj"+this.modifyProcedure[type];
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    Control form1, form2;
-                    for (int i = 0; i < 6; i++)
+                    if ((textBox1.Text.Length > 0 == textBox1.Visible) &&
+                    (textBox2.Text.Length > 0 == textBox2.Visible) &&
+                    (textBox3.Text.Length > 0 == textBox3.Visible) &&
+                    (textBox4.Text.Length > 0 == textBox4.Visible) &&
+                    (textBox5.Text.Length > 0 == textBox5.Visible) &&
+                    (textBox6.Text.Length > 0 == textBox6.Visible)) //pola wymagane są 
                     {
-                        form1 = this.Controls[labels[i]];
-                        if (((Label)form1).Visible)
+                        result = 0;
+                        cmd = mainForm.mainForm.con.CreateCommand();
+                        cmd.CommandText = "modyfikuj" + this.modifyProcedure[type];
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        Control form1, form2;
+                        for (int i = 0; i < 6; i++)
                         {
-                            form2 = this.Controls[textBoxes[i]];
-                            if (format[i] == 'V')
+                            form1 = this.Controls[labels[i]];
+                            if (((Label)form1).Visible)
                             {
-                                cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Varchar2).Value = ((TextBox)form2).Text;
-                            }
-                            else if (format[i] == 'N')
-                            {
-                                try { result = Int32.Parse(((TextBox)form2).Text); }
-                                catch (FormatException)
+                                form2 = this.Controls[textBoxes[i]];
+                                if (format[i] == 'V')
                                 {
-                                    MessageBox.Show("Podaj liczbe w polu " + ((Label)form1).Text);
-                                    Console.WriteLine("Podaj liczbe we wlasciwym polu'");
-                                    break;
+                                    cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Varchar2).Value = ((TextBox)form2).Text;
                                 }
-                                cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Decimal).Value = result;
-                            }
-                            else
-                            {
-                                int rok, miesiac, dzien;
-                                try
+                                else if (format[i] == 'N')
                                 {
-                                    rok = Int32.Parse(((TextBox)form2).Text.Substring(0, 4));
-                                    miesiac = Int32.Parse(((TextBox)form2).Text.Substring(5, 2));
-                                    dzien = Int32.Parse(((TextBox)form2).Text.Substring(8, 2));
+                                    try { result = Int32.Parse(((TextBox)form2).Text); }
+                                    catch (FormatException)
+                                    {
+                                        MessageBox.Show("Podaj liczbe w polu " + ((Label)form1).Text);
+                                        Console.WriteLine("Podaj liczbe we wlasciwym polu'");
+                                        break;
+                                    }
+                                    cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Decimal).Value = result;
                                 }
-                                catch (Exception)
+                                else
                                 {
-                                    MessageBox.Show("Podaj odpowiedni format zapisu daty w polu " + ((Label)form1).Text);
-                                    break;
+                                    int rok, miesiac, dzien;
+                                    try
+                                    {
+                                        rok = Int32.Parse(((TextBox)form2).Text.Substring(0, 4));
+                                        miesiac = Int32.Parse(((TextBox)form2).Text.Substring(5, 2));
+                                        dzien = Int32.Parse(((TextBox)form2).Text.Substring(8, 2));
+                                    }
+                                    catch (Exception)
+                                    {
+                                        MessageBox.Show("Podaj odpowiedni format zapisu daty w polu " + ((Label)form1).Text);
+                                        break;
+                                    }
+                                    DateTime dt;
+                                    try
+                                    {
+                                        dt = new DateTime(rok, miesiac, dzien, 0, 0, 0, 0);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        MessageBox.Show("Podaj wlasciwa date");
+                                        break;
+                                    }
+                                    cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Date).Value = dt;
                                 }
-                                DateTime dt = new DateTime(rok, miesiac, dzien, 12, 23, 22, 0);
-                                cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Date).Value = dt;
                             }
                         }
+                        try
+                        {
+                            cmd.ExecuteNonQuery();
+                            CleanTextBoxes();
+                        }
+                        catch (Exception q)
+                        {
+                            exceptionSevice(q);
+                        }
                     }
-                    try
-                    {
-                        cmd.ExecuteNonQuery();
-                        CleanTextBoxes();
-                    }
-                    catch (Exception q)
-                    {
-                        exceptionSevice(q);
-                    }
-                        
                     break;
                 case 4:
                     OracleCommand cmd3 = mainForm.mainForm.con.CreateCommand();
@@ -625,7 +719,7 @@ namespace SQL_project
                     else
                     {
                         Console.WriteLine("No rows found.");
-                        this.richTextBox1.Text += "Brak wierszy";
+                        this.richTextBox1.Text = "Brak wierszy";
                     }
                     reader1.Close();
                     break;
@@ -645,6 +739,11 @@ namespace SQL_project
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
         }
