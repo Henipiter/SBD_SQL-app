@@ -127,11 +127,18 @@ namespace SQL_project
         }
         private void exceptionSevice(Exception a)
         {
-            MessageBox.Show(a.Message);
+           
             string code = a.Message.Substring(0, 9);
             if (code == "ORA-00001")
             {
                 MessageBox.Show("Istnieje identyfikator o takiej nazwie");
+            }else if (code == "ORA-21122")
+            {
+                MessageBox.Show("Samochod zostal juz wynajety w tym terminie");
+            }
+            else if (code == "ORA-21222")
+            {
+                MessageBox.Show("Samochod zostal juz sprzedany");
             }
             else if(code == "ORA-02291")
             {
@@ -152,6 +159,10 @@ namespace SQL_project
                 string msg = "Zbyt duzo znakow w polu ";
                 msg += a.Message.Split('"')[5];
                 MessageBox.Show(msg);
+            }
+            else
+            {
+                MessageBox.Show(a.Message);
             }
 
         }
@@ -405,6 +416,12 @@ namespace SQL_project
                                     MessageBox.Show("Podaj wlasciwa date");
                                     break;
                                 }
+                                try { if (dt > dt2) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Daty sie wykluczaja");
+                                    break;
+                                }
                                 cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "noweZlecenieWynajmu";
                                 cmd.CommandType = CommandType.StoredProcedure;
@@ -508,10 +525,10 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception)
+                                catch (Exception q)
                                 {
 
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 break;
                             case 9:

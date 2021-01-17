@@ -41,8 +41,8 @@
             // 
             // CountCarsButton
             // 
-            this.CountCarsButton.Location = new System.Drawing.Point(84, 82);
-            this.CountCarsButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CountCarsButton.Location = new System.Drawing.Point(84, 84);
+            this.CountCarsButton.Margin = new System.Windows.Forms.Padding(4);
             this.CountCarsButton.Name = "CountCarsButton";
             this.CountCarsButton.Size = new System.Drawing.Size(168, 48);
             this.CountCarsButton.TabIndex = 0;
@@ -53,7 +53,7 @@
             // CountRepairButton
             // 
             this.CountRepairButton.Location = new System.Drawing.Point(260, 84);
-            this.CountRepairButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CountRepairButton.Margin = new System.Windows.Forms.Padding(4);
             this.CountRepairButton.Name = "CountRepairButton";
             this.CountRepairButton.Size = new System.Drawing.Size(168, 46);
             this.CountRepairButton.TabIndex = 1;
@@ -63,8 +63,8 @@
             // 
             // CountCarCosts
             // 
-            this.CountCarCosts.Location = new System.Drawing.Point(436, 82);
-            this.CountCarCosts.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CountCarCosts.Location = new System.Drawing.Point(436, 84);
+            this.CountCarCosts.Margin = new System.Windows.Forms.Padding(4);
             this.CountCarCosts.Name = "CountCarCosts";
             this.CountCarCosts.Size = new System.Drawing.Size(168, 48);
             this.CountCarCosts.TabIndex = 2;
@@ -75,7 +75,7 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(84, 50);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(519, 22);
             this.textBox1.TabIndex = 3;
@@ -93,7 +93,7 @@
             // ResultBox
             // 
             this.ResultBox.Location = new System.Drawing.Point(33, 201);
-            this.ResultBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ResultBox.Margin = new System.Windows.Forms.Padding(4);
             this.ResultBox.Multiline = true;
             this.ResultBox.Name = "ResultBox";
             this.ResultBox.Size = new System.Drawing.Size(980, 323);
@@ -102,7 +102,7 @@
             // CountCarEarnings
             // 
             this.CountCarEarnings.Location = new System.Drawing.Point(612, 84);
-            this.CountCarEarnings.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CountCarEarnings.Margin = new System.Windows.Forms.Padding(4);
             this.CountCarEarnings.Name = "CountCarEarnings";
             this.CountCarEarnings.Size = new System.Drawing.Size(168, 48);
             this.CountCarEarnings.TabIndex = 6;
@@ -112,8 +112,8 @@
             // 
             // CountCarValue
             // 
-            this.CountCarValue.Location = new System.Drawing.Point(788, 82);
-            this.CountCarValue.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CountCarValue.Location = new System.Drawing.Point(788, 84);
+            this.CountCarValue.Margin = new System.Windows.Forms.Padding(4);
             this.CountCarValue.Name = "CountCarValue";
             this.CountCarValue.Size = new System.Drawing.Size(168, 48);
             this.CountCarValue.TabIndex = 7;
@@ -123,8 +123,8 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(788, 145);
-            this.CancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CancelButton.Location = new System.Drawing.Point(788, 140);
+            this.CancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(168, 48);
             this.CancelButton.TabIndex = 11;
@@ -146,7 +146,7 @@
             this.Controls.Add(this.CountCarCosts);
             this.Controls.Add(this.CountRepairButton);
             this.Controls.Add(this.CountCarsButton);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form5";
             this.Text = "Form5";
             this.ResumeLayout(false);
