@@ -110,6 +110,17 @@ namespace SQL_project
         {
 
         }
+        private void exceptionSevice(Exception a)
+        {
+            MessageBox.Show(a.Message);
+            string code = a.Message.Substring(0, 9);
+            if (code == "ORA-00001")
+            {
+                MessageBox.Show("Istnieje wypozyczalnia o takiej nazwie");
+                Console.WriteLine("Istnieje wypozyczalnia o takiej nazwie");
+            }
+
+        }
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -150,10 +161,9 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception)
+                                catch (Exception q)
                                 {
-
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 break;
                             case 1:
@@ -167,13 +177,9 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception jj)
+                                catch (Exception q)
                                 {
-                                    if (jj.Message.Substring(0, 9) == "ORA-00001")
-                                    {
-                                        MessageBox.Show("Istnieje wypozyczalnia o takiej nazwie");
-                                        Console.WriteLine("Istnieje wypozyczalnia o takiej nazwie");
-                                    }
+                                    exceptionSevice(q);
                                 }
                                 break;
                             case 2:
@@ -187,10 +193,9 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception)
+                                catch (Exception q)
                                 {
-
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 
                                 break;
@@ -214,10 +219,9 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception)
+                                catch (Exception q)
                                 {
-
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 
                                 break;
@@ -248,10 +252,9 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception hh)
+                                catch (Exception q)
                                 {
-
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 break;
                             case 6:
@@ -295,10 +298,9 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception)
+                                catch (Exception q)
                                 {
-
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 break;
                             case 7:
@@ -347,10 +349,9 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception)
+                                catch (Exception q)
                                 {
-
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 break;
                             case 3:
@@ -400,10 +401,9 @@ namespace SQL_project
                                     this.label5.Visible = false;
                                     this.textBox5.Visible = false;
                                 }
-                                catch (Exception)
+                                catch (Exception q)
                                 {
-
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 break;
                             case 8:
@@ -448,10 +448,9 @@ namespace SQL_project
                                     cmd.ExecuteNonQuery();
                                     CleanTextBoxes();
                                 }
-                                catch (Exception)
+                                catch (Exception q)
                                 {
-
-                                    throw;
+                                    exceptionSevice(q);
                                 }
                                 break;
                         }
@@ -487,10 +486,9 @@ namespace SQL_project
                             cmd.ExecuteNonQuery();
                             CleanTextBoxes();
                         }
-                        catch (Exception)
+                        catch (Exception q)
                         {
-
-                            throw;
+                            exceptionSevice(q);
                         }
                         break;
 
@@ -602,10 +600,9 @@ namespace SQL_project
                         cmd.ExecuteNonQuery();
                         CleanTextBoxes();
                     }
-                    catch (Exception a)
+                    catch (Exception q)
                     {
-
-                        MessageBox.Show(a.Message);
+                        exceptionSevice(q);
                     }
                         
                     break;

@@ -45,7 +45,7 @@ namespace SQL_project
             }
             catch 
             {
-                MessageBox.Show("error");
+                MessageBox.Show("Bledny login lub haslo");
             }
             
         }
