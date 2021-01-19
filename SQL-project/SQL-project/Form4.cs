@@ -214,11 +214,13 @@ namespace SQL_project
                                     Console.WriteLine("Podaj liczbe w polu 'Rocznik'");
                                     break;
                                 }
-                                try
+                                try { if (result <= 0) throw new Exception(); }
+                                catch (Exception)
                                 {
-                                    if (this.textBox1.Text.Length != 17)
-                                        throw new Exception();
+                                    MessageBox.Show("Liczba w polu 'Rocznik' musi byc dodatnia");
+                                    break;
                                 }
+                                try { if (this.textBox1.Text.Length != 17) throw new Exception(); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Numer VIN musi miec 17 znakow");
@@ -273,7 +275,6 @@ namespace SQL_project
                                 {
                                     exceptionSevice(q);
                                 }
-                                
                                 break;
 
                             case 4:
@@ -282,6 +283,12 @@ namespace SQL_project
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'PESEL'");
+                                    break;
+                                }
+                                try { if (pesel <= 0) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Liczba 'PESEL' musi byc dodatnia");
                                     break;
                                 }
                                 cmd = mainForm.mainForm.con.CreateCommand();
@@ -309,10 +316,22 @@ namespace SQL_project
                                     MessageBox.Show("Podaj liczbe w polu 'PESEL'");
                                     break;
                                 }
+                                try { if (pesel <= 0) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Liczba 'PESEL' musi byc dodatnia");
+                                    break;
+                                }
                                 try { placa = Int32.Parse(this.textBox5.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Placa'");
+                                    break;
+                                }
+                                try { if (placa <= 0) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Liczba w polu 'Placa' musi byc dodatnia");
                                     break;
                                 }
                                 cmd = mainForm.mainForm.con.CreateCommand();
@@ -342,10 +361,22 @@ namespace SQL_project
                                     MessageBox.Show("Podaj liczbe w polu 'Cena'");
                                     break;
                                 }
+                                try { if (cena <= 0) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Liczba w polu 'Cena' musi byc dodatnia");
+                                    break;
+                                }
                                 try { rabat = Int32.Parse(this.textBox4.Text); }
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Rabat'");
+                                    break;
+                                }
+                                try { if (rabat <= 0) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Liczba w polu 'Rabat' musi byc dodatnia");
                                     break;
                                 }
                                 cmd = mainForm.mainForm.con.CreateCommand();
@@ -393,6 +424,12 @@ namespace SQL_project
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Cena'");
+                                    break;
+                                }
+                                try { if (cena <= 0) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Liczba w polu 'Cena' musi byc dodatnia");
                                     break;
                                 }
                                 int rok2, miesiac2, dzien2;
@@ -475,6 +512,12 @@ namespace SQL_project
                                         MessageBox.Show("Podaj liczbe w polu 'Cena'");
                                         break;
                                     }
+                                    try { if (cena <= 0) throw new Exception(); }
+                                    catch (Exception)
+                                    {
+                                        MessageBox.Show("Liczba w polu 'Cena' musi byc dodatnia");
+                                        break;
+                                    }
                                     try
                                     {
                                         rok = Int32.Parse(this.textBox2.Text.Substring(0, 4));
@@ -536,6 +579,12 @@ namespace SQL_project
                                     MessageBox.Show("Podaj liczbe w polu 'Cena'");
                                     break;
                                 }
+                                try { if (cena <= 0) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Liczba w polu 'Cena' musi byc dodatnia");
+                                    break;
+                                }
                                 cmd = mainForm.mainForm.con.CreateCommand();
                                 cmd.CommandText = "noweCzesci";
                                 cmd.CommandType = CommandType.StoredProcedure;
@@ -557,6 +606,12 @@ namespace SQL_project
                                 catch (Exception)
                                 {
                                     MessageBox.Show("Podaj liczbe w polu 'Cena'");
+                                    break;
+                                }
+                                try { if (cena <= 0) throw new Exception(); }
+                                catch (Exception)
+                                {
+                                    MessageBox.Show("Liczba w polu 'Cena' musi byc dodatnia");
                                     break;
                                 }
                                 int nrNaprawy = Int32.Parse(this.textBox1.Text);
@@ -595,6 +650,12 @@ namespace SQL_project
                             {
                                 MessageBox.Show("Podaj liczbe w identyfikatorze");
                                 Console.WriteLine("Podaj liczbe w identyfikatorze");
+                                break;
+                            }
+                            try { if (result <= 0) throw new Exception(); }
+                            catch (Exception)
+                            {
+                                MessageBox.Show("Liczba w polu identyfikatora musi byc dodatnia");
                                 break;
                             }
                         }
@@ -642,68 +703,57 @@ namespace SQL_project
                     break;
 
                 case 2:
-                    if (1==1)
-
+                    OracleCommand cmd2 = mainForm.mainForm.con.CreateCommand();
+                    cmd2.CommandText = "";
+                    int c = cmd2.CommandText.Length;
+                    for(int i=0; i < 6; i++)
                     {
-                        OracleCommand cmd2 = mainForm.mainForm.con.CreateCommand();
-                        cmd2.CommandText = "";
-                        int c = cmd2.CommandText.Length;
-                        for(int i=0; i < 6; i++)
+                        if (this.Controls[textBoxes[i]].Text.Length>0)
                         {
-                            if (this.Controls[textBoxes[i]].Text.Length>0)
-                            {
-                                cmd2.CommandText += this.Controls[labels[i]].Text.Substring(1) + "=";
-                                if (format[i] == 'V')
-                                    cmd2.CommandText += "'" + this.Controls[textBoxes[i]].Text + "' and ";
+                            cmd2.CommandText += this.Controls[labels[i]].Text.Substring(1) + "=";
+                            if (format[i] == 'V')
+                                cmd2.CommandText += "'" + this.Controls[textBoxes[i]].Text + "' and ";
                                 
-                                else if (format[i] == 'N')
-                                    cmd2.CommandText += this.Controls[textBoxes[i]].Text + " and ";
-                                else if (format[i] == 'D')
-                                    cmd2.CommandText += "'"+ this.Controls[textBoxes[i]].Text.Substring(0,4) + this.Controls[textBoxes[i]].Text.Substring(5, 2) + this.Controls[textBoxes[i]].Text.Substring(8,2) + "' and ";
-                            }
+                            else if (format[i] == 'N')
+                                cmd2.CommandText += this.Controls[textBoxes[i]].Text + " and ";
+                            else if (format[i] == 'D')
+                                cmd2.CommandText += "'"+ this.Controls[textBoxes[i]].Text.Substring(0,4) + this.Controls[textBoxes[i]].Text.Substring(5, 2) + this.Controls[textBoxes[i]].Text.Substring(8,2) + "' and ";
                         }
-                        if(cmd2.CommandText.Length > 0)
-                        {
-
-                            cmd2.CommandText = " where " + cmd2.CommandText;
+                    }
+                    if (cmd2.CommandText.Length > 0)
+                    {
+                        cmd2.CommandText = " where " + cmd2.CommandText;
                         cmd2.CommandText = cmd2.CommandText.Substring(0, cmd2.CommandText.Length - 5);
-                        }
-
-                        cmd2.CommandText = "select * from " + entity[this.type] + cmd2.CommandText;
-                        OracleDataReader reader = cmd2.ExecuteReader();
-                        string[] row1;
-                        List<string> list1 = new List<string>();
-
-                        if (reader.HasRows)
+                    }
+                    cmd2.CommandText = "select * from " + entity[this.type] + cmd2.CommandText;
+                    OracleDataReader reader = cmd2.ExecuteReader();
+                    string[] row1;
+                    List<string> list1 = new List<string>();
+                    if (reader.HasRows)
+                    {
+                        list1 = null;
+                        this.richTextBox1.Text = "";
+                        this.RekordyTab.Rows.Clear();
+                        while (reader.Read())
                         {
-                            
-                            list1 = null;
-                            this.richTextBox1.Text = "";
-                            this.RekordyTab.Rows.Clear();
-                            while (reader.Read())
+                            list1 = new List<string>();
+                            for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                list1 = new List<string>();
-                                for (int i = 0; i < reader.FieldCount; i++)
-                                {
-                                    list1.Add(reader.GetString(i));
-                                    this.richTextBox1.Text += reader.GetString(i) + "; ";
-                                }
-                                row1 = list1.ToArray();
-                                this.RekordyTab.Rows.Add(row1);
-                                this.richTextBox1.Text += "\n";
+                                list1.Add(reader.GetString(i));
+                                this.richTextBox1.Text += reader.GetString(i) + "; ";
                             }
+                            row1 = list1.ToArray();
+                            this.RekordyTab.Rows.Add(row1);
+                            this.richTextBox1.Text += "\n";
                         }
-                        else
-                        {
-                            Console.WriteLine("No rows found.");
-                            this.richTextBox1.Text = "Zadanych wierszy nie znaleziono";
-                        }
-                        reader.Close();
                     }
                     else
                     {
-                        MessageBox.Show("Przynajmniej jedno pole musi byc wypelnione");
+                        Console.WriteLine("No rows found.");
+                        this.richTextBox1.Text = "Zadanych wierszy nie znaleziono";
                     }
+                    reader.Close();
+                    
                     break;
                 case 3:
                     if ((textBox1.Text.Length > 0 == textBox1.Visible) &&
@@ -735,6 +785,12 @@ namespace SQL_project
                                     {
                                         MessageBox.Show("Podaj liczbe w polu " + ((Label)form1).Text);
                                         Console.WriteLine("Podaj liczbe we wlasciwym polu'");
+                                        break;
+                                    }
+                                    try { if (result <= 0) throw new Exception(); }
+                                    catch (Exception)
+                                    {
+                                        MessageBox.Show("Liczba w polu musi byc dodatnia");
                                         break;
                                     }
                                     cmd.Parameters.Add("v" + ((Label)form1).Text, OracleDbType.Decimal).Value = result;
