@@ -22,13 +22,30 @@ namespace SQL_project
         private string[] modifyProcedure = { "samochod","wypozyczalnie","warsztat","naprawe","klienta","pracownika","zleceniesprzedazy","zleceniewynajmu" };
         private int[] labels = new int[6];
         private int[] textBoxes = new int[6];
+        private int[] columns = new int[6];
         private char[] format = new char[6];
         private bool[] key = new bool[6];
         private Form2 mainForm = null;
+        
+       // private DataGridView recordsTable = new DataGridView();
         public Form4(Form mainF, int func, int type, string[] labels)
         {
+            
+           
+
             mainForm = mainF as Form2;
             InitializeComponent();
+
+            if (func == 4 || func == 3)
+                this.RekordyTab.Visible = true;
+            for (int i = 0; i < 6; i++)
+            {
+                if (labels[i].Length > 0)
+                    this.RekordyTab.Columns[i].HeaderText = Char.ToString(labels[i][0]) + labels[i].Substring(2);
+                else
+                    this.RekordyTab.Columns[i].Visible = false;
+            }
+
             this.function = func;
             this.type = type;
             this.button1.Text = operators[func]+" "+name[type];
@@ -45,7 +62,10 @@ namespace SQL_project
                     {
                         this.labels[g] = k;
                         if (labels[g].Length == 0 || function == 4 || (function == 1 && g != 0))
+                        {
                             ((Label)form).Visible = false;
+                        }
+
                         else
                         {
                             this.format[g] = labels[g][1];
@@ -53,7 +73,8 @@ namespace SQL_project
                                 this.key[g] = true;
                             else
                                 this.key[g] = false;
-                            ((Label)form).Text = Char.ToString(labels[g][0])+labels[g].Substring(2);
+                            ((Label)form).Text = Char.ToString(labels[g][0]) + labels[g].Substring(2);
+
                         }
                     }
                 }
@@ -63,7 +84,7 @@ namespace SQL_project
                     if (g < 6)
                     {
                         this.textBoxes[g] = k;
-                        if (labels[g].Length == 0 || function == 4 || (function == 1 && g != 0)) 
+                        if (labels[g].Length == 0 || function == 4 || (function == 1 && g != 0))
                             ((TextBox)form).Visible = false;
                     }
                 }
@@ -621,16 +642,11 @@ namespace SQL_project
                     break;
 
                 case 2:
-                    if ((textBox1.Text.Length > 0 == true) ||
-                    (textBox2.Text.Length > 0 == true) ||
-                    (textBox3.Text.Length > 0 == true) ||
-                    (textBox4.Text.Length > 0 == true) ||
-                    (textBox5.Text.Length > 0 == true) ||
-                    (textBox6.Text.Length > 0 == true))
+                    if (1==1)
 
                     {
                         OracleCommand cmd2 = mainForm.mainForm.con.CreateCommand();
-                        cmd2.CommandText = "select * from " + entity[this.type] + " where ";
+                        cmd2.CommandText = "";
                         int c = cmd2.CommandText.Length;
                         for(int i=0; i < 6; i++)
                         {
@@ -646,17 +662,34 @@ namespace SQL_project
                                     cmd2.CommandText += "'"+ this.Controls[textBoxes[i]].Text.Substring(0,4) + this.Controls[textBoxes[i]].Text.Substring(5, 2) + this.Controls[textBoxes[i]].Text.Substring(8,2) + "' and ";
                             }
                         }
+                        if(cmd2.CommandText.Length > 0)
+                        {
+
+                            cmd2.CommandText = " where " + cmd2.CommandText;
                         cmd2.CommandText = cmd2.CommandText.Substring(0, cmd2.CommandText.Length - 5);
+                        }
+
+                        cmd2.CommandText = "select * from " + entity[this.type] + cmd2.CommandText;
                         OracleDataReader reader = cmd2.ExecuteReader();
+                        string[] row1;
+                        List<string> list1 = new List<string>();
+
                         if (reader.HasRows)
                         {
+                            
+                            list1 = null;
                             this.richTextBox1.Text = "";
+                            this.RekordyTab.Rows.Clear();
                             while (reader.Read())
                             {
+                                list1 = new List<string>();
                                 for (int i = 0; i < reader.FieldCount; i++)
                                 {
+                                    list1.Add(reader.GetString(i));
                                     this.richTextBox1.Text += reader.GetString(i) + "; ";
                                 }
+                                row1 = list1.ToArray();
+                                this.RekordyTab.Rows.Add(row1);
                                 this.richTextBox1.Text += "\n";
                             }
                         }
@@ -666,7 +699,6 @@ namespace SQL_project
                             this.richTextBox1.Text = "Zadanych wierszy nie znaleziono";
                         }
                         reader.Close();
-
                     }
                     else
                     {
@@ -750,16 +782,25 @@ namespace SQL_project
                     OracleCommand cmd3 = mainForm.mainForm.con.CreateCommand();
                     cmd3.CommandText = "select * from " + entity[this.type];
                     OracleDataReader reader1 = cmd3.ExecuteReader();
+                    List<string> list;
+                    string[] row;
+                    this.RekordyTab.Rows.Clear();
                     if (reader1.HasRows)
                     {
                         this.richTextBox1.Text = "";
+                       
                         while (reader1.Read())
                         {
+                            list = null;
+                            list = new List<string>();
                             for (int i = 0; i < reader1.FieldCount; i++)
                             {
+                                list.Add(reader1.GetString(i));
                                 this.richTextBox1.Text += reader1.GetString(i) + "; ";
                             }
                             this.richTextBox1.Text += "\n";
+                            row = list.ToArray();
+                            this.RekordyTab.Rows.Add(row);
                         }
                     }
                     else
@@ -790,6 +831,11 @@ namespace SQL_project
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

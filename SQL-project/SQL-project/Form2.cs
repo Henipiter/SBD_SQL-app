@@ -113,7 +113,7 @@ namespace SQL_project
            // this.Hide();
             this.ButtonsDefaultSettings(0, 5);
             this.type = 0;
-            string[] labels = { "*VNumer_VIN", " VMarka", " VCModel", " NRocznik", "*VNazwa_wypozyczalni_posiadajacej", ""};
+            string[] labels = { "*VNumer_VIN", " VMarka", " VCModel", " NRocznik", "*VNazwa_wypozyczalni_posiadajacej", " VCzy_sprzedany"};
             Form4 formularz = new Form4(this, this.function, this.type, labels);
             formularz.Show();
         }
