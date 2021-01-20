@@ -36,7 +36,7 @@ namespace SQL_project
             mainForm = mainF as Form2;
             InitializeComponent();
 
-            if (func == 4 || func == 3)
+            if (func == 4 || func == 2)
                 this.RekordyTab.Visible = true;
             for (int i = 0; i < 6; i++)
             {
