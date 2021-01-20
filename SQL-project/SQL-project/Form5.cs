@@ -33,7 +33,7 @@ namespace SQL_project
             }
             OracleCommand cmd = mainForm.mainForm.con.CreateCommand();
             //select ilenaprawdanysamochod('aaaaaaaaaaaaaaaaa') from dual;
-            cmd.CommandText = "select "+nameFunction+"('"+argument+"') from dual" ;
+            cmd.CommandText = "select "+nameFunction+"("+argument+") from dual" ;
             OracleDataReader reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {

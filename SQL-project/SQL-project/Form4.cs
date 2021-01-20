@@ -195,7 +195,7 @@ namespace SQL_project
             {
                 case 0:
                     OracleCommand cmd;
-                    int result;
+                    long result;
                     if ((textBox1.Text.Length > 0 == textBox1.Visible) &&
                     (textBox2.Text.Length > 0 == textBox2.Visible) &&
                     (textBox3.Text.Length > 0 == textBox3.Visible) &&
@@ -780,7 +780,7 @@ namespace SQL_project
                                 }
                                 else if (format[i] == 'N')
                                 {
-                                    try { result = Int32.Parse(((TextBox)form2).Text); }
+                                    try { result = Int64.Parse(((TextBox)form2).Text); }
                                     catch (FormatException)
                                     {
                                         MessageBox.Show("Podaj liczbe w polu " + ((Label)form1).Text);
